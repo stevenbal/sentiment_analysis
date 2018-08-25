@@ -19,5 +19,5 @@ classifier = bigram.Classifier(('positive', LM_pos), ('negative', LM_neg))
 #print classifier.test_accuracy('corpora/rt-polaritydata/rt-polaritydata/rt-polarity.pos', 'positive')
 #print classifier.test_accuracy('corpora/rt-polaritydata/rt-polaritydata/rt-polarity.neg', 'negative')
 
-print classifier.classify(sentence)
+print(classifier.classify(sentence))
 
