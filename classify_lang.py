@@ -21,3 +21,5 @@ classifier = bigram.Classifier(('positive', LM_pos), ('negative', LM_neg))
 
 print(classifier.classify(sentence))
 
+#test
+
