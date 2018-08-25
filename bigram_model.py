@@ -2,7 +2,7 @@ import collections
 import sys
 import operator
 import os
-import cPickle as pickle
+import _pickle as pickle
 import re
 import math
 from nltk.stem import *
@@ -61,8 +61,8 @@ class LanguageModel:
                     line = line.lower().split() if self.words else line.lower()
                     if self.stemming:
                         line = [stemmer.stem(word) for word in line]
-                    for j in xrange(1, N+1):
-                        for i in xrange(j, len(line)+1):
+                    for j in range(1, N+1):
+                        for i in range(j, len(line)+1):
                             #words = line[0:i] if i-j < 0 else line[i-j:i]
                             words = line[i-j:i]
                             add_to_model(models[j-1], words, 1)
@@ -81,7 +81,7 @@ class LanguageModel:
         sentence_prob = 1
         if not N:
             N = len(self.models)
-        for i in xrange(1, len(sentence)+1):
+        for i in range(1, len(sentence)+1):
             words = sentence[0:i] if i-N < 0 else sentence[i-N:i]
             sentence_prob += math.log(get_relative_freq(self.models[:N], words))
         return sentence_prob
