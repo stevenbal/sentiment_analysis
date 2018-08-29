@@ -8,7 +8,7 @@ class LanguageModel:
     def __init__(self, source, words=True):
         self.words = words
         self.unigrams, self.bigrams = self.make_model(source)
-         
+
     def make_model(self, directory):
         bigrams = collections.Counter()
         unigrams = collections.Counter()
@@ -74,9 +74,3 @@ class Classifier:
                 total += 1
             text.close()
         return correct / float(total)
-        
-
-
-
-
-

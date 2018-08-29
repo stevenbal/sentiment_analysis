@@ -11,8 +11,13 @@ if len(sys.argv) > 1:
 else:
     sentence = input('Please enter a sentence: ')
 
-LM_pos = bigram.LanguageModel('corpora/review_polarity/txt_sentoken/pos', N=3)
-LM_neg = bigram.LanguageModel('corpora/review_polarity/txt_sentoken/neg', N=3)
+#LM_pos = bigram.LanguageModel('corpora/review_polarity/txt_sentoken/pos', N=3)
+#LM_neg = bigram.LanguageModel('corpora/review_polarity/txt_sentoken/neg', N=3)
+
+LM_pos = bigram.LanguageModel(model_file='models/positive_n5.p')
+LM_neg = bigram.LanguageModel(model_file='models/negative_n5.p')
+#LM_pos_char = bigram.LanguageModel(model_file='models/positive_char_n5.p')
+#LM_neg_char = bigram.LanguageModel(model_file='models/negative_char_n5.p')
 
 classifier = bigram.Classifier(('positive', LM_pos), ('negative', LM_neg))
 
@@ -20,6 +25,3 @@ classifier = bigram.Classifier(('positive', LM_pos), ('negative', LM_neg))
 #print classifier.test_accuracy('corpora/rt-polaritydata/rt-polaritydata/rt-polarity.neg', 'negative')
 
 print(classifier.classify(sentence))
-
-#testaaaa
-

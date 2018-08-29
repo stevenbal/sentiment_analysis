@@ -2,9 +2,10 @@ import collections
 import sys
 import operator
 import os
-import _pickle as pickle
+import pickle
 import re
 import math
+from functools import reduce
 from nltk.stem import *
 from copy import copy
 
@@ -12,7 +13,7 @@ def add_to_model(dic, keys, value):
     for key in keys[:-1]:
         dic = dic.setdefault(key, {})
     dic[keys[-1]] = dic[keys[-1]] + value if keys[-1] in dic else value
-    
+
 def get_value(dic, path):
     try:
         value = reduce(dict.get, path, dic)
@@ -36,9 +37,9 @@ class LanguageModel:
             self.words = words
             self.stemming = stemming
             self.models = self.make_models(source, N)
-        elif model_file:     
+        elif model_file:
             self.words, self.stemming, self.models = pickle.load(open(model_file, "rb"))
-    
+
     def instantiate_models(self, n):
         models = []
         current = int
@@ -47,7 +48,7 @@ class LanguageModel:
             model = copy(current())
             models.append(model)
         return models
-         
+
     def make_models(self, directory, N):
         if self.stemming:
             stemmer = PorterStemmer()
@@ -57,7 +58,7 @@ class LanguageModel:
             with open(directory + '/' + filename) as text:
                 for line in text:
                     line = re.sub(r'[^A-z\s]', '', line)
-                    line = "<s> " + line + " </s>"
+                    #line = "<s> " + line + " </s>"
                     line = line.lower().split() if self.words else line.lower()
                     if self.stemming:
                         line = [stemmer.stem(word) for word in line]
@@ -70,10 +71,10 @@ class LanguageModel:
         for i in range(len(models)):
             models[i] = dict(models[i])
         return models
-    
+
     def compute_prob(self, sentence, N=None):
-        sentence = re.sub(r'[^A-z\s]', '', sentence)
-        sentence = "<s> " + sentence + " </s>"
+        sentence = re.sub(r'[^A-z0-9\s]', '', sentence)
+        #sentence = "<s> " + sentence + " </s>"
         sentence = sentence.lower().split() if self.words else sentence.lower()
         if self.stemming:
             stemmer = PorterStemmer()
@@ -111,6 +112,7 @@ class Classifier:
             return collections.Counter(results).most_common(1)[0][0]
         else:
             probs = {category:model.compute_prob(sentence) for category, model in self.models.items()}
+            print(probs)
             return max(probs, key=probs.get)
 
     '''def test_accuracy(self, filename, sentiment, mixture=0):
@@ -123,7 +125,7 @@ class Classifier:
                 total += 1
             text.close()
         return correct / float(total)'''
-    
+
     def test_accuracy(self, filename, sentiment, mixture=0):
         with open(filename) as text:
             txt = text.readlines()
