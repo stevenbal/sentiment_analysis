@@ -1,14 +1,18 @@
 import collections
-import sys
-import operator
+#import operator
+#import sys
 import os
+import csv
 import pickle
 import re
 import math
 from functools import reduce
-from nltk.stem import *
+from nltk.stem import PorterStemmer
 from copy import copy
 
+#TODO toy example with small text to check if ngram computation is correct!!
+
+#separate class for dicts
 def add_to_model(dic, keys, value):
     for key in keys[:-1]:
         dic = dic.setdefault(key, {})
@@ -36,10 +40,12 @@ class LanguageModel:
         if source:
             self.words = words
             self.stemming = stemming
+            #self.model_order = N
             self.models = self.make_models(source, N)
         elif model_file:
             self.words, self.stemming, self.models = pickle.load(open(model_file, "rb"))
-
+            
+    #TODO Separate class for nested dicts
     def instantiate_models(self, n):
         models = []
         current = int
@@ -57,8 +63,8 @@ class LanguageModel:
         for filename in files:
             with open(directory + '/' + filename) as text:
                 for line in text:
-                    line = re.sub(r'[^A-z\s]', '', line)
-                    #line = "<s> " + line + " </s>"
+                    line = re.sub(r'[^A-z0-9\s]', '', line)
+                    line = "<s> " + line + " </s>"
                     line = line.lower().split() if self.words else line.lower()
                     if self.stemming:
                         line = [stemmer.stem(word) for word in line]
@@ -74,7 +80,7 @@ class LanguageModel:
 
     def compute_prob(self, sentence, N=None):
         sentence = re.sub(r'[^A-z0-9\s]', '', sentence)
-        #sentence = "<s> " + sentence + " </s>"
+        sentence = "<s> " + sentence + " </s>"
         sentence = sentence.lower().split() if self.words else sentence.lower()
         if self.stemming:
             stemmer = PorterStemmer()
@@ -101,35 +107,54 @@ class LanguageModel:
 
 class Classifier:
     def __init__(self, *models):
-        self.models = {model[0] : model[1] for model in models}
+        self.models = {model[0]: model[1] for model in models}
 
-    def classify(self, sentence, mixture=0):
+    def classify(self, sentence, mixture=[]):
         if mixture:
+            if max(mixture) > len(self.models['positive'].get_models()):
+                raise ModelOrderError(max(mixture))
             results = []
-            for i in range(1, mixture+1):
-                probs = {category:model.compute_prob(sentence, N=i) for category, model in self.models.items()}
+            for order in mixture:
+                probs = {category: model.compute_prob(sentence, N=order) for category, model in self.models.items()}
                 results.append(max(probs, key=probs.get))
+            #print(results)
             return collections.Counter(results).most_common(1)[0][0]
         else:
             probs = {category:model.compute_prob(sentence) for category, model in self.models.items()}
-            print(probs)
+            #print(probs)
             return max(probs, key=probs.get)
 
-    '''def test_accuracy(self, filename, sentiment, mixture=0):
-        total = 0
-        correct = 0
-        with open(filename) as text:
-            for line in text.readlines():
-                if self.classify(line, mixture=mixture) == sentiment:
-                    correct += 1
-                total += 1
-            text.close()
-        return correct / float(total)'''
+    def evaluate(self, filename, mixture=0):
+        results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
+        i = 0
+        with open(filename, errors='replace') as csvfile:
+            datareader = csv.reader(csvfile, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            for line, sentiment in datareader:
+                #i += 1
+                #if i > 10:
+                #    break
+                prediction = self.classify(line, mixture=mixture)
+                if prediction == sentiment:
+                    results[sentiment]['true'] += 1
+                else:
+                    results[prediction]['false'] += 1
+            csvfile.close()
+        print('precision {}, recall {}'.format(self.compute_precision(results), self.compute_recall(results)))
+        return results
 
-    def test_accuracy(self, filename, sentiment, mixture=0):
-        with open(filename) as text:
-            txt = text.readlines()
-            results = [self.classify(line, mixture=mixture) for line in txt]
-            total = len(txt)
-            text.close()
-        return results.count(sentiment) / float(total)
+    def compute_precision(self, results):
+        if (results['positive']['true'] + results['positive']['false']):
+            precision = results['positive']['true'] / (results['positive']['true'] + results['positive']['false'])
+        else:
+            precision = 0
+        return precision
+
+    def compute_recall(self, results):
+        if (results['positive']['true'] + results['positive']['false']):
+            recall = results['positive']['true'] / (results['positive']['true'] + results['negative']['false'])
+        else:
+            recall = 0
+        return recall
+
+class ModelOrderError(ValueError):
+    pass
