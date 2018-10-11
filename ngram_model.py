@@ -3,11 +3,12 @@ import collections
 #import sys
 import os
 import csv
-import pickle
+import _pickle as pickle
 import re
 import math
 from functools import reduce
 from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
 from copy import copy
 
 #TODO toy example with small text to check if ngram computation is correct!!
@@ -36,15 +37,17 @@ def get_relative_freq(models, words):
         return (ngram_freq + 1) / float(n_min_one_freq + voc_size)
 
 class LanguageModel:
-    def __init__(self, source="", N=2, words=True, stemming=False, model_file=""):
+    def __init__(self, source="", N=2, words=True, stemming=False, stopword_removal=True, model_file=""):
         if source:
             self.words = words
             self.stemming = stemming
+            self.stopword_removal = stopword_removal
             #self.model_order = N
             self.models = self.make_models(source, N)
         elif model_file:
-            self.words, self.stemming, self.models = pickle.load(open(model_file, "rb"))
-            
+            self.words, self.stemming, self.stopword_removal, self.models = pickle.load(open(model_file, "rb"))
+
+    #__repr__
     #TODO Separate class for nested dicts
     def instantiate_models(self, n):
         models = []
@@ -58,6 +61,8 @@ class LanguageModel:
     def make_models(self, directory, N):
         if self.stemming:
             stemmer = PorterStemmer()
+        if self.stopword_removal:
+            stopwords_english = list(set(stopwords.words('english')))
         models = self.instantiate_models(N)
         files = os.listdir(directory)
         for filename in files:
@@ -68,6 +73,8 @@ class LanguageModel:
                     line = line.lower().split() if self.words else line.lower()
                     if self.stemming:
                         line = [stemmer.stem(word) for word in line]
+                    if self.stopword_removal:
+                        line = [x for x in line if x not in stopwords_english]
                     for j in range(1, N+1):
                         for i in range(j, len(line)+1):
                             #words = line[0:i] if i-j < 0 else line[i-j:i]
@@ -81,10 +88,15 @@ class LanguageModel:
     def compute_prob(self, sentence, N=None):
         sentence = re.sub(r'[^A-z0-9\s]', '', sentence)
         sentence = "<s> " + sentence + " </s>"
-        sentence = sentence.lower().split() if self.words else sentence.lower()
+        sentence = sentence.lower().split()
+        if self.stopword_removal:
+            stopwords_english = list(set(stopwords.words('english')))
+            sentence = [x for x in sentence if x not in stopwords_english]
         if self.stemming:
             stemmer = PorterStemmer()
             sentence = [stemmer.stem(word) for word in sentence]
+        if not self.words:
+            sentence = ' '.join(sentence)
         sentence_prob = 1
         if not N:
             N = len(self.models)
@@ -100,7 +112,7 @@ class LanguageModel:
         self.models = models
 
     def save_models(self, filename):
-        pickle.dump([self.words, self.stemming, self.models], open(filename, "wb"))
+        pickle.dump([self.words, self.stemming, self.stopword_removal, self.models], open(filename, "wb"))
 
     def load_models(self, filename):
         self.models = pickle.load(open(filename, "rb"))
@@ -117,7 +129,6 @@ class Classifier:
             for order in mixture:
                 probs = {category: model.compute_prob(sentence, N=order) for category, model in self.models.items()}
                 results.append(max(probs, key=probs.get))
-            #print(results)
             return collections.Counter(results).most_common(1)[0][0]
         else:
             probs = {category:model.compute_prob(sentence) for category, model in self.models.items()}
