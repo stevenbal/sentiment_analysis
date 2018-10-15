@@ -1,6 +1,7 @@
 import collections
 import csv
 
+import visualize
 from ngram_model import LanguageModel
 
 class NaiveBayesClassifier:
@@ -58,16 +59,21 @@ class NaiveBayesClassifier:
         """
         results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
         i = 0
+        correct_labels = []
+        predicted_labels = []
         with open(filename, errors='replace') as csvfile:
             datareader = csv.reader(csvfile, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             for line, sentiment in datareader:
+                correct_labels.append(sentiment)
                 prediction = self.classify(line, mixture=mixture)
+                predicted_labels.append(prediction)
                 if prediction == sentiment:
                     results[sentiment]['true'] += 1
                 else:
                     results[prediction]['false'] += 1
             csvfile.close()
         print('precision {}, recall {}'.format(self.compute_precision(results), self.compute_recall(results)))
+        visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive'])
         return results
 
     def compute_precision(self, results):

@@ -12,8 +12,8 @@ LM_neg = ngram.LanguageModel('corpora/review_polarity/txt_sentoken/neg', N=3, wo
 
 # Load the ngram models for negative and positive sentiments, n=3 and stopwords
 # are omitted
-LM_pos = ngram.LanguageModel(model_file='models/positive_n3_nostopwords.p')
-LM_neg = ngram.LanguageModel(model_file='models/negative_n3_nostopwords.p')
+LM_pos = ngram.LanguageModel(model_file='models/positive_n3.p')
+LM_neg = ngram.LanguageModel(model_file='models/negative_n3.p')
 
 #LM_pos_char = ngram.LanguageModel(model_file='models/positive_char_n6_nostopwords.p')
 #LM_neg_char = ngram.LanguageModel(model_file='models/negative_char_n6_nostopwords.p')
