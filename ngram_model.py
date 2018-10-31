@@ -9,7 +9,7 @@ from copy import copy
 from NestedDict import NestedDict
 
 class LanguageModel:
-    def __init__(self, source="", N=2, words=True, stemming=False, stopword_removal=True, model_file=""):
+    def __init__(self, source='', N=2, words=True, stemming=False, stopword_removal=True, model_file=''):
         """
         Description:        constructor for an n-gram LanguageModel object with given parameters
 
@@ -32,7 +32,7 @@ class LanguageModel:
             self.stopword_removal = stopword_removal
             self.models = self.make_models(source, N)
         elif model_file:
-            self.words, self.stemming, self.stopword_removal, self.models = pickle.load(open(model_file, "rb"))
+            self.words, self.stemming, self.stopword_removal, self.models = pickle.load(open(model_file, 'rb'))
 
     def __repr__(self):
         """
@@ -42,7 +42,7 @@ class LanguageModel:
         -object_string: string that shows the model parameters of an instance
         """
         parameters = [len(self.models), self.words, self.stemming, self.stopword_removal]
-        object_string = "LanguageModel(N={}, words={}, stemming={}, stopword_removal={})".format(*parameters)
+        object_string = 'LanguageModel(N={}, words={}, stemming={}, stopword_removal={})'.format(*parameters)
         return object_string
 
     def get_relative_freq(self, models, words):
@@ -79,7 +79,7 @@ class LanguageModel:
             with open(directory + '/' + filename) as text:
                 for line in text:
                     line = re.sub(r'[^A-z0-9\s]', '', line)
-                    line = "<s> " + line + " </s>"
+                    line = '<s> ' + line + ' </s>'
                     line = line.lower().split() if self.words else line.lower()
                     if self.stemming:
                         line = [stemmer.stem(word) for word in line]
@@ -108,7 +108,7 @@ class LanguageModel:
         -sentence_prob:     float, the log probability of the sentence
         """
         sentence = re.sub(r'[^A-z0-9\s]', '', sentence)
-        sentence = "<s> " + sentence + " </s>"
+        sentence = '<s> ' + sentence + ' </s>'
         sentence = sentence.lower().split()
         if self.stopword_removal:
             stopwords_english = list(set(stopwords.words('english')))
@@ -144,7 +144,7 @@ class LanguageModel:
         Input:
         -filename:      str, the name of the file in which the data will be stored
         """
-        pickle.dump([self.words, self.stemming, self.stopword_removal, self.models], open(filename, "wb"))
+        pickle.dump([self.words, self.stemming, self.stopword_removal, self.models], open(filename, 'wb'))
 
     def load_models(self, filename):
         """
@@ -154,4 +154,4 @@ class LanguageModel:
         Input:
         -filename:      str, the name of the file containing the model and parameters
         """
-        self.models = pickle.load(open(filename, "rb"))
+        self.models = pickle.load(open(filename, 'rb'))

@@ -4,6 +4,8 @@ from time import time
 import ngram_model as ngram
 import NaiveBayesClassifier as NBclassifier
 
+#TODO word vector embeddings
+
 LM_pos = ngram.LanguageModel('corpora/review_polarity/txt_sentoken/pos', N=3, words=True)
 LM_neg = ngram.LanguageModel('corpora/review_polarity/txt_sentoken/neg', N=3, words=True)
 
