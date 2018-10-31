@@ -8,6 +8,8 @@ from copy import copy
 
 from NestedDict import NestedDict
 
+# TODO tf-idf? Smoothing kneser-ney
+
 class LanguageModel:
     def __init__(self, source='', N=2, words=True, stemming=False, stopword_removal=True, model_file=''):
         """

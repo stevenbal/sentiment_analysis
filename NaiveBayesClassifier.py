@@ -74,7 +74,7 @@ class NaiveBayesClassifier:
             csvfile.close()
         print('precision {}, recall {}'.format(self.compute_precision(results), self.compute_recall(results)))
         visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive'])
-        return results
+        return self.compute_precision(results), self.compute_recall(results), results
 
     def compute_precision(self, results):
         """
