@@ -4,24 +4,24 @@ Simple Naive Bayes classifier that uses n-gram models to try and predict whether
 
 Written in Python version 3.6.2
 
-# Directory descriptions
-## corpora/
+## Directory descriptions
+### corpora/
 Contains corpora with documents labeled with sentiment 'positive' or 'negative'
 
-## deprecated/
+### deprecated/
 Contains older versions of certain .py files
 
-## models/
+### models/
 Contains n-gram models that were created with specific settings and saved, used to speed up the classification task
 
-## resources/
+### resources/
 Contains the class files that are used in the scripts
 
-## results/
+### results/
 Contains preliminary results for the Naive Bayes classifier are shown in results/NaiveBayesClassifier_results.txt
 
 
-# Basic functionality
+## Basic functionality
 To classify a given sentence, use the following terminal command:
 ```console
 user@user:~$ python3 classify_sentence.py "..."
