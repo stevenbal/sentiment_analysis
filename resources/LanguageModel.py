@@ -6,7 +6,7 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from copy import copy
 
-from NestedDict import NestedDict
+from resources.NestedDict import NestedDict
 
 # TODO tf-idf? Smoothing kneser-ney
 

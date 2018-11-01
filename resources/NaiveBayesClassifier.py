@@ -1,8 +1,8 @@
 import collections
 import csv
 
-import visualize
-from ngram_model import LanguageModel
+import resources.visualize as visualize
+from resources.LanguageModel import LanguageModel
 
 class NaiveBayesClassifier:
     def __init__(self, *models):
