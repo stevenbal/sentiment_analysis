@@ -1,0 +1,6 @@
+NaiveBayesClassifier with N=2 words=True stemming=True stopword_removal=False
+Mixture model of orders: []
+Test corpus: rottentomatoesPrecision: 0.6475112155522325
+Recall: 0.5685612455449259
+Counts: {'positive': {'true': 3031, 'false': 1650}, 'negative': {'true': 3681, 'false': 2300}}
+

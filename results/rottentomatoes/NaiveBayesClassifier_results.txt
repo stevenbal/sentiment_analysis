@@ -1,0 +1,42 @@
+NaiveBayesClassifier with N=5 words=False stemming=False stopword_removal=False
+Mixture model of orders: [1, 2, 3, 4, 5]
+Precision: 0.6630981346309813
+Recall: 0.7668354905271056
+Counts: {'positive': {'true': 4088, 'false': 2077}, 'negative': {'true': 3254, 'false': 1243}}
+
+NaiveBayesClassifier with N=7 words=False stemming=False stopword_removal=False
+Mixture model of orders: [3, 4, 5, 6, 7]
+Precision: 0.6557803468208092
+Recall: 0.8512474207465767
+Counts: {'positive': {'true': 4538, 'false': 2382}, 'negative': {'true': 2949, 'false': 793}}
+
+NaiveBayesClassifier with N=7 words=False stemming=False stopword_removal=False
+Mixture model of orders: [5, 6, 7]
+Precision: 0.6408977556109726
+Recall: 0.8677546426561621
+Counts: {'positive': {'true': 4626, 'false': 2592}, 'negative': {'true': 2739, 'false': 705}}
+
+NaiveBayesClassifier with N=7 words=False stemming=False stopword_removal=False
+Mixture model of orders: []
+Precision: 0.6338738247717672
+Recall: 0.8726317764021759
+Counts: {'positive': {'true': 4652, 'false': 2687}, 'negative': {'true': 2644, 'false': 679}}
+
+NaiveBayesClassifier with N=7 words=False stemming=False stopword_removal=False
+Mixture model of orders: [2, 3, 6]
+Precision: 0.653232179547969
+Recall: 0.7752766835490527
+Counts: {'positive': {'true': 4133, 'false': 2194}, 'negative': {'true': 3137, 'false': 1198}}
+
+NaiveBayesClassifier with N=3 words=True stemming=True stopword_removal=False
+Mixture model of orders: [2]
+Precision: 0.7017119464086342
+Recall: 0.7073719752391672
+Counts: {'positive': {'true': 3771, 'false': 1603}, 'negative': {'true': 3728, 'false': 1560}}
+
+NaiveBayesClassifier with N=3 words=True stemming=True stopword_removal=False
+Mixture model of orders: [2]
+Precision: 0.8536439665471923
+Recall: 0.8572285542891421
+Counts: {'positive': {'true': 1429, 'false': 245}, 'negative': {'true': 1416, 'false': 238}}
+
