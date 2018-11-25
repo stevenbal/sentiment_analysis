@@ -3,6 +3,8 @@ import csv
 
 import resources.visualize as visualize
 from resources.LanguageModel import LanguageModel
+import numpy as np
+import pandas as pd
 
 class NaiveBayesClassifier:
     def __init__(self, *models):
@@ -16,7 +18,7 @@ class NaiveBayesClassifier:
         """
         self.models = {model[0]: model[1] for model in models}
 
-    def classify(self, sentence, mixture=[]):
+    def classify(self, sentence, mixture=[], prediction_thres=0):
         """
         Description:        function that returns the most probable class for a given
                             sentence
@@ -26,6 +28,10 @@ class NaiveBayesClassifier:
         -mixture:           list, contains integers specifying the orders of models
                             to be used as a mixture model, the class is selected by
                             majority vote in this case (default: [])
+        -prediction_thres:  float, indicates the threshold of the difference between
+                            the prediction probabilities, if the difference is below
+                            the threshold, no prediction is produced, instead
+                            'undefined' is returned
 
         Output:
         -predicted_class:   str, the class as predicted by the classifier
@@ -36,15 +42,38 @@ class NaiveBayesClassifier:
             results = []
             for order in mixture:
                 probs = {category: model.compute_prob(sentence, N=order) for category, model in self.models.items()}
-                results.append(max(probs, key=probs.get))
+                sorted_probs = sorted(probs, key=probs.get, reverse=True)
+                most_prob, second_most_prob = sorted_probs[0:2]
+                difference = abs(probs[most_prob] - probs[second_most_prob])
+                # print(probs)
+                # print(sorted_probs, difference / abs(np.mean(list(probs.values()))))
+                if difference / abs(np.mean(list(probs.values()))) < prediction_thres:
+                    predicted_class = 'undefined'
+                else:
+                    predicted_class = most_prob
+                results.append(predicted_class)
             predicted_class = collections.Counter(results).most_common(1)[0][0]
             return predicted_class
         else:
             probs = {category: model.compute_prob(sentence) for category, model in self.models.items()}
-            predicted_class = max(probs, key=probs.get)
+            sorted_probs = sorted(probs, key=probs.get, reverse=True)
+            most_prob, second_most_prob = sorted_probs[0:2]
+            # print(most_prob, second_most_prob)
+            difference = abs(probs[most_prob] - probs[second_most_prob])
+
+            # most_prob_class = max(probs, key=probs.get)
+            # perc = probs[predicted_class] / probs[min(probs, key=probs.get)]
+            # print('diff', diff)
+            # print('perc', perc)
+            # print('diff/max', diff / abs(np.mean(list(probs.values()))))
+
+            if difference / abs(np.mean(list(probs.values()))) < prediction_thres:
+                predicted_class = 'undefined'
+            else:
+                predicted_class = most_prob
             return predicted_class
 
-    def evaluate(self, filename, mixture=[]):
+    def evaluate(self, filename, mixture=[], prediction_thres=0):
         """
         Description:    function that evaluates the performance of the classifier
                         for a given test corpus
@@ -57,24 +86,48 @@ class NaiveBayesClassifier:
         -results:       dict, contains the counts of true and false positives
                         and true and false negatives
         """
+        # results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
+        # correct_labels = []
+        # predicted_labels = []
+        # with open(filename, errors='replace') as csvfile:
+        #     datareader = csv.reader(csvfile, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        #     for line, sentiment in datareader:
+        #         correct_labels.append(sentiment)
+        #         prediction = self.classify(line, mixture=mixture)
+        #         predicted_labels.append(prediction)
+        #         if prediction == 'undefined':
+        #             continue
+        #         if prediction == sentiment:
+        #             results[sentiment]['true'] += 1
+        #         else:
+        #             results[prediction]['false'] += 1
+        #     csvfile.close()
+        # precision = self.compute_precision(results)
+        # recall = self.compute_recall(results)
+        # print(f'precision {precision}, recall {recall}')
+        # visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive', 'Undefined'])
+        # return precision, recall, results
+
         results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
-        i = 0
         correct_labels = []
         predicted_labels = []
-        with open(filename, errors='replace') as csvfile:
-            datareader = csv.reader(csvfile, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            for line, sentiment in datareader:
-                correct_labels.append(sentiment)
-                prediction = self.classify(line, mixture=mixture)
-                predicted_labels.append(prediction)
-                if prediction == sentiment:
-                    results[sentiment]['true'] += 1
-                else:
-                    results[prediction]['false'] += 1
-            csvfile.close()
-        print('precision {}, recall {}'.format(self.compute_precision(results), self.compute_recall(results)))
-        visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive'])
-        return self.compute_precision(results), self.compute_recall(results), results
+        data = pd.read_csv(filename, encoding="ISO-8859-1")
+        for index, row in data.iterrows():
+            sentiment = row['sentiment']
+            correct_labels.append(sentiment)
+            prediction = self.classify(row['text'], mixture=mixture, prediction_thres=prediction_thres)
+            predicted_labels.append(prediction)
+            if prediction == 'undefined':
+                continue
+            if prediction == sentiment:
+                results[sentiment]['true'] += 1
+            else:
+                results[prediction]['false'] += 1
+        precision = self.compute_precision(results)
+        recall = self.compute_recall(results)
+        print(f'precision {precision}, recall {recall}')
+        visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive', 'Undefined'])
+        return precision, recall, results
 
     def compute_precision(self, results):
         """
