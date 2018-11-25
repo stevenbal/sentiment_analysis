@@ -3,3 +3,5 @@
 __pycache__
 *.ipynb
 backup1.py
+.vscode
+.deprecated/
