@@ -1,7 +1,7 @@
-import sys
 from time import time
-import json
 import argumentparser
+import pandas as pd
+import os
 
 import resources.LanguageModel as ngram
 import resources.NaiveBayesClassifier as NBclassifier
@@ -51,17 +51,28 @@ classifier = NBclassifier.NaiveBayesClassifier(('positive', LM_pos), ('negative'
 
 # Evaluate the classifier on the test set and report precision and recall,
 # use a mixture model if specified
-
 t4 = time()
-res = classifier.evaluate(corpora_dir+testing_corpus+'/development_data.csv', mixture=mixture, prediction_thres=0)
+precision, recall, counts = classifier.evaluate(corpora_dir+testing_corpus+'/development_data.csv', mixture=mixture, prediction_thres=0)
 t5 = time()
 
 print('Evaluation took', t5-t4, 'seconds')
 
-with open('results/'+ training_corpus +'/NaiveBayesClassifier_results.txt', 'a') as result_file:
-    result_file.write(f'NaiveBayesClassifier with N={N} words={words} stemming={stemming} stopword_removal={stopword_removal}\n')
-    result_file.write(f'Mixture model of orders: {mixture}\n')
-    result_file.write(f'Test corpus: {testing_corpus}')
-    result_file.write(f'Precision: {res[0]}\n')
-    result_file.write(f'Recall: {res[1]}\n')
-    result_file.write(f'Counts: {res[2]}\n\n')
+def save_results(result_filename, training_corpus, **kwargs):
+    if result_filename in os.listdir('results/'+training_corpus):
+        results = pd.read_csv('results/'+training_corpus+'/'+result_filename)
+        mask = True
+        for argument, value in kwargs.items():
+            mask &= (result['argument'] == value)
+        if not results[mask].empty:
+            results.loc[mask] = [list(kwargs.values())]
+        else:
+            results = results.append(pd.DataFrame([list(kwargs.values())]))
+        results.to_csv('results/'+training_corpus+result_filename, index=False)
+    else:
+        results = pd.DataFrame([list(kwargs.values())])
+        results.columns = list(kwargs.keys())
+        results.to_csv('results/'+training_corpus+'/'+result_filename, index=False)
+
+save_results('NaiveBayesClassifier_results.csv', training_corpus, N=N, stemming=stemming,
+              stopword_removal=stopword_removal, mixture=mixture, testing_corpus=testing_corpus,
+              precision=precision, recall=recall, counts=counts)

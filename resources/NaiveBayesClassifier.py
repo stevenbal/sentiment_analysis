@@ -28,10 +28,10 @@ class NaiveBayesClassifier:
         -mixture:           list, contains integers specifying the orders of models
                             to be used as a mixture model, the class is selected by
                             majority vote in this case (default: [])
-        -prediction_thres:  float, indicates the threshold of the difference between
-                            the prediction probabilities, if the difference is below
-                            the threshold, no prediction is produced, instead
-                            'undefined' is returned
+        -prediction_thres:  float, specifies the minimum required difference divided
+                            by the average log probability as produced by the n-gram
+                            models to produce a prediction, else the classification
+                            returns 'undefined'
 
         Output:
         -predicted_class:   str, the class as predicted by the classifier
@@ -75,39 +75,21 @@ class NaiveBayesClassifier:
 
     def evaluate(self, filename, mixture=[], prediction_thres=0):
         """
-        Description:    function that evaluates the performance of the classifier
-                        for a given test corpus
+        Description:        function that evaluates the performance of the classifier
+                            for a given test corpus
 
         Input:
-        -filename:      str, the name of the csv file containing the test corpus
-        -mixture:       list, specifies the mixture model (default: [])
+        -filename:          str, the name of the csv file containing the test corpus
+        -mixture:           list, specifies the mixture model (default: [])
+        -prediction_thres:  float, specifies the minimum required difference divided
+                            by the average log probability as produced by the n-gram
+                            models to produce a prediction, else the classification
+                            returns 'undefined'
 
         Output:
-        -results:       dict, contains the counts of true and false positives
-                        and true and false negatives
+        -results:           dict, contains the counts of true and false positives
+                            and true and false negatives
         """
-        # results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
-        # correct_labels = []
-        # predicted_labels = []
-        # with open(filename, errors='replace') as csvfile:
-        #     datareader = csv.reader(csvfile, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        #     for line, sentiment in datareader:
-        #         correct_labels.append(sentiment)
-        #         prediction = self.classify(line, mixture=mixture)
-        #         predicted_labels.append(prediction)
-        #         if prediction == 'undefined':
-        #             continue
-        #         if prediction == sentiment:
-        #             results[sentiment]['true'] += 1
-        #         else:
-        #             results[prediction]['false'] += 1
-        #     csvfile.close()
-        # precision = self.compute_precision(results)
-        # recall = self.compute_recall(results)
-        # print(f'precision {precision}, recall {recall}')
-        # visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive', 'Undefined'])
-        # return precision, recall, results
-
         results = {'positive': {'true': 0, 'false': 0}, 'negative': {'true': 0, 'false': 0}}
         correct_labels = []
         predicted_labels = []

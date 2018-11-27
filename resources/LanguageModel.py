@@ -17,8 +17,8 @@ class LanguageModel:
         Description:        constructor for an n-gram LanguageModel object with given parameters
 
         Input:
-        -source:            str, the directory containing the text files of the
-                            corpus used to construct the n-gram model
+        -source:            str, the name of the file containing the training
+                            corpus for the n-gram model
         -N:                 int, the order of the model (default: 2)
         -words:             bool, indicates whether the n-gram model is created
                             from words or characters (default: True)
@@ -31,9 +31,7 @@ class LanguageModel:
         """
         if source:
             self.words = words
-            # self.stemming = stemming
             self.stemmer = PorterStemmer() if stemming else None
-            # self.stopword_removal = stopword_removal
             self.stopwords_english = list(set(stopwords.words('english'))) if stopword_removal else None
             self.models = self.make_models(source, N)
         elif model_file:
@@ -58,8 +56,8 @@ class LanguageModel:
                         and a given corpus directory
 
         Input:
-        -directory:     str, the directory containing the text files of the
-                        corpus used to construct the n-gram model
+        -filename:      str, the name of the file containing the training
+                        corpus for the n-gram model
         -N:             int, the order of the model
 
         Output:
@@ -71,19 +69,9 @@ class LanguageModel:
         for index, row in data.iterrows():
             line = row['text']
             line = self.preprocess_sentence(line)
-            # line = re.sub(r'(@|http:\/\/)[^\s]*', '', line)
-            # line = re.sub(r'[^A-z0-9\s]', '', line)
-            # line = f'<s> {line} </s>'
-            # line = line.lower().split() if self.words else line.lower()
-            # if self.stemming:
-            #     line = [stemmer.stem(word) for word in line]
-            # if self.stopword_removal:
-            #     line = [x for x in line if x not in stopwords_english]
             for j in range(1, N+1):
                 for i in range(j, len(line)+1):
-                    #words = line[0:i] if i-j < 0 else line[i-j:i]
                     words = line[i-j:i]
-                    #add_to_model(models[j-1], words, 1)
                     models[j-1].add_by_path(words, 1)
         return models
 
@@ -112,6 +100,16 @@ class LanguageModel:
         return relative_freq
 
     def preprocess_sentence(self, line):
+        """
+        Description:    function that preprocesses sentences and applies
+                        stemming and stopword removal if appropriate
+
+        Input:
+        -line:          str, sentence to be preprocessed
+
+        Output:
+        -line:          str, the preprocessed sentence
+        """
         line = re.sub(r'(@|http:\/\/)[^\s]*', '', line)
         line = re.sub(r'[^A-z0-9\s]', '', line)
         line = f'<s> {line} </s>'
@@ -135,19 +133,7 @@ class LanguageModel:
         Output:
         -sentence_prob:     float, the log probability of the sentence
         """
-        
-        # sentence = re.sub(r'[^A-z0-9\s]', '', sentence)
-        # sentence = f'<s> {sentence} </s>'
-        # sentence = sentence.lower().split()
         sentence = self.preprocess_sentence(sentence)
-        # if self.stopword_removal:
-        #     stopwords_english = list(set(stopwords.words('english')))
-        #     sentence = [x for x in sentence if x not in stopwords_english]
-        # if self.stemming:
-        #     stemmer = PorterStemmer()
-        #     sentence = [stemmer.stem(word) for word in sentence]
-        # if not self.words:
-        #     sentence = ' '.join(sentence)
         sentence_prob = 1
         if not N:
             N = len(self.models)
@@ -175,13 +161,3 @@ class LanguageModel:
         -filename:      str, the name of the file in which the data will be stored
         """
         pickle.dump([self.words, self.stemmer, self.stopwords_english, self.models], open(filename, 'wb'))
-
-    # def load_models(self, filename):
-    #     """
-    #     Description:    loads a previously saved model and parameters into an
-    #                     LanguageModel instance
-
-    #     Input:
-    #     -filename:      str, the name of the file containing the model and parameters
-    #     """
-    #     self.models = pickle.load(open(filename, 'rb'))

@@ -29,4 +29,4 @@ if __name__ == '__main__':
     else:
         sentence = input('Please enter a sentence: ')
 
-    print(classifier.classify(sentence, mixture=[2], prediction_thres=0))
+    print(classifier.classify(sentence, mixture=[2], prediction_thres=0.02))
