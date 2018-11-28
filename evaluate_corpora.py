@@ -58,19 +58,24 @@ t5 = time()
 print('Evaluation took', t5-t4, 'seconds')
 
 def save_results(result_filename, training_corpus, **kwargs):
+    kwargs['mixture'] = str(kwargs['mixture'])
+    colnames = list(kwargs.keys())
+    arg_values = arg_values = list(kwargs.values())
     if result_filename in os.listdir('results/'+training_corpus):
         results = pd.read_csv('results/'+training_corpus+'/'+result_filename)
         mask = True
         for argument, value in kwargs.items():
-            mask &= (result['argument'] == value)
+            try:
+                mask &= (results[argument] == value)
+            except:
+                pass
         if not results[mask].empty:
-            results.loc[mask] = [list(kwargs.values())]
+            results.loc[mask] = [arg_values]
         else:
-            results = results.append(pd.DataFrame([list(kwargs.values())]))
-        results.to_csv('results/'+training_corpus+result_filename, index=False)
+            results = results.append(pd.DataFrame([arg_values], columns=colnames))
+        results.to_csv('results/'+training_corpus+'/'+result_filename, index=False)
     else:
-        results = pd.DataFrame([list(kwargs.values())])
-        results.columns = list(kwargs.keys())
+        results = pd.DataFrame([arg_values], columns=colnames)
         results.to_csv('results/'+training_corpus+'/'+result_filename, index=False)
 
 save_results('NaiveBayesClassifier_results.csv', training_corpus, N=N, stemming=stemming,

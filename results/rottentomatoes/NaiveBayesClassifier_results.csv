@@ -1,2 +1,3 @@
 N,stemming,stopword_removal,mixture,testing_corpus,precision,recall,counts
+3,True,False,[],rottentomatoes,0.6756832910679065,0.44982179703620334,"{'positive': {'true': 2398, 'false': 1151}, 'negative': {'true': 4180, 'false': 2933}}"
 2,True,False,[],rottentomatoes,0.7017119464086342,0.7073719752391672,"{'positive': {'true': 3771, 'false': 1603}, 'negative': {'true': 3728, 'false': 1560}}"
