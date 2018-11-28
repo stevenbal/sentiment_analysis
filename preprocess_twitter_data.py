@@ -31,7 +31,7 @@ testing_data = pd.concat([pos_testing, neg_testing])
 
 result_dir = 'corpora/processed/twitter/'
 
-pos_training.to_csv(result_dir+'positive_training.csv', index=False)
-neg_training.to_csv(result_dir+'negative_training.csv', index=False)
-dev_data.to_csv(result_dir+'development_data.csv', index=False)
-testing_data.to_csv(result_dir+'testing_data.csv', index=False)
+pos_training.to_csv(f'{result_dir}positive_training.csv', index=False)
+neg_training.to_csv(f'{result_dir}negative_training.csv', index=False)
+dev_data.to_csv(f'{result_dir}development_data.csv', index=False)
+testing_data.to_csv(f'{result_dir}testing_data.csv', index=False)

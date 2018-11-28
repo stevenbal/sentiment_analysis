@@ -9,7 +9,7 @@ parser.add_argument('--stopword_removal', help='Remove stopwords')
 parser.add_argument('--mixture', nargs = '*', help='Specify orders of mixture model')
 parser.add_argument('--method', help='Specify how to obtain models')
 parser.add_argument('--training_corpus', help='Specify corpus to train the model with')
-parser.add_argument('--testing_corpus', help='Specify corpus to test the model with')
+parser.add_argument('--dev_corpus', help='Specify corpus to evaluate the model with (development data)')
 
 args = parser.parse_args()
 
@@ -20,7 +20,7 @@ if len(args.__dict__) > 4:
     stopword_removal = args.stopword_removal  == 'True'
     method = args.method
     training_corpus = args.training_corpus
-    testing_corpus = args.testing_corpus
+    dev_corpus = args.dev_corpus
     if args.mixture:
         mixture = [int(i) for i in args.mixture]
     else:
