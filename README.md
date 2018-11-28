@@ -25,8 +25,8 @@ Contains the class files that are used in the scripts
 Contains preliminary results for each different training corpus
 
 ## Basic command line functionality
-To classify a given sentence, use the following terminal command:
-```bash
+To classify a given sentence, the following bash command can be used:
+```console
 user@user:~$ python classify_sentence.py "..."
 ```
 Where ... denotes the sentence to be classified
