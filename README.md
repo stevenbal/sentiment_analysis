@@ -26,14 +26,14 @@ Contains preliminary results for each different training corpus
 
 ## Basic command line functionality
 To classify a given sentence, use the following terminal command:
-```console
+```bash
 user@user:~$ python classify_sentence.py "..."
 ```
 Where ... denotes the sentence to be classified
 
 ## Basic classifier instantiation and sentence classification in Python
 To classify a sentence in a Python script:
-```
+```python
 import resources.LanguageModel as ngram
 import resources.NaiveBayesClassifier as NBclassifier
 
