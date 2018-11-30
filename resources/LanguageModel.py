@@ -8,6 +8,7 @@ import pandas as pd
 from copy import copy
 
 from resources.NestedDict import NestedDict
+from resources.utilities import preprocess_sentence
 
 # TODO tf-idf? Smoothing kneser-ney
 
@@ -68,7 +69,7 @@ class LanguageModel:
         data = pd.read_csv(filename, encoding="ISO-8859-1")
         for index, row in data.iterrows():
             line = row['text']
-            line = self.preprocess_sentence(line)
+            line = self.apply_modifications(line)
             for j in range(1, N+1):
                 for i in range(j, len(line)+1):
                     words = line[i-j:i]
@@ -99,26 +100,25 @@ class LanguageModel:
             relative_freq = (ngram_freq + alpha) / float(n_min_one_freq + alpha*voc_size)
         return relative_freq
 
-    def preprocess_sentence(self, line):
+    def apply_modifications(self, sentence):
         """
         Description:    function that preprocesses sentences and applies
                         stemming and stopword removal if appropriate
 
         Input:
-        -line:          str, sentence to be preprocessed
+        -sentence:          str, sentence to be preprocessed
 
         Output:
-        -line:          str, the preprocessed sentence
+        -sentence:          str, the preprocessed sentence
         """
-        line = re.sub(r'(@|http:\/\/)[^\s]*', '', line)
-        line = re.sub(r'[^A-z0-9\s]', '', line)
-        line = f'<s> {line} </s>'
-        line = line.lower().split() if self.words else line.lower()
+        sentence = f'<s> {sentence} </s>'
+        if self.words:
+            sentence = sentence.split()
         if self.stemmer:
-            line = [self.stemmer.stem(word) for word in line]
+            sentence = [self.stemmer.stem(word) for word in sentence]
         if self.stopwords_english:
-            line = [x for x in line if x not in self.stopwords_english]
-        return line
+            sentence = [word for word in sentence if word not in self.stopwords_english]
+        return sentence
     
     def compute_prob(self, sentence, N=None):
         """
@@ -133,11 +133,11 @@ class LanguageModel:
         Output:
         -sentence_prob:     float, the log probability of the sentence
         """
-        sentence = self.preprocess_sentence(sentence)
+        sentence = preprocess_sentence(sentence)
+        sentence = self.apply_modifications(sentence)
         sentence_prob = 1
         if not N:
             N = len(self.models)
-
         for i in range(1, len(sentence)+1):
             words = sentence[0:i] if i-N < 0 else sentence[i-N:i]
             sentence_prob += math.log(self.get_relative_freq(self.models[:N], words))

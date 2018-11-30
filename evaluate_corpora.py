@@ -55,6 +55,8 @@ t4 = time()
 precision, recall, counts = classifier.evaluate(f'{corpora_dir}{dev_corpus}/development_data.csv', mixture=mixture, prediction_thres=0)
 t5 = time()
 
+# precision, recall, counts = 5.0,3.0,"{'positive': {'true': 3781, 'false': 1608}, 'negative': {'true': 3723, 'false': 1550}}"
+
 print('Evaluation took', t5-t4, 'seconds')
 
 def save_results(result_filename, training_corpus, **kwargs):
@@ -76,11 +78,13 @@ def save_results(result_filename, training_corpus, **kwargs):
     arg_values = arg_values = list(kwargs.values())
     if result_filename in os.listdir(f'results/{training_corpus}'):
         results = pd.read_csv(res_path)
-        mask = True
+        masked_res = results
         for argument, value in kwargs.items():
-            mask &= (results[argument] == value)
-        if not results[mask].empty:
-            results.loc[mask] = [arg_values]
+            if argument in ['precision', 'recall', 'counts']:
+                continue
+            masked_res = masked_res[masked_res[argument] == value]
+        if not masked_res.empty:
+            masked_res = [arg_values]
         else:
             results = results.append(pd.DataFrame([arg_values], columns=colnames))
         results.to_csv(res_path, index=False)
