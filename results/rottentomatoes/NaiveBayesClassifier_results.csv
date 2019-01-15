@@ -1,2 +1,11 @@
-N,stemming,stopword_removal,mixture,dev_corpus,precision,recall,counts
-2,True,False,[],rottentomatoes,0.7016143997030989,0.709247795910711,"{'positive': {'true': 3781, 'false': 1608}, 'negative': {'true': 3723, 'false': 1550}}"
+N,words,stemming,stopword_removal,mixture,dev_corpus,precision,recall,counts
+4,True,True,False,"[2, 3, 4]",rottentomatoes,0.7043451838347007,0.43481523166385294,"{'positive': {'true': 2318, 'false': 973}, 'negative': {'true': 4358, 'false': 3013}}"
+2,True,True,False,[],rottentomatoes,0.7016143997030989,0.709247795910711,"{'positive': {'true': 3781, 'false': 1608}, 'negative': {'true': 3723, 'false': 1550}}"
+2,True,False,False,[],rottentomatoes,0.7110343426132901,0.6563496529731757,"{'positive': {'true': 3499, 'false': 1422}, 'negative': {'true': 3909, 'false': 1832}}"
+2,False,False,False,[],rottentomatoes,0.6021314387211367,0.6359032076533483,"{'positive': {'true': 3390, 'false': 2240}, 'negative': {'true': 3091, 'false': 1941}}"
+3,False,False,False,[],rottentomatoes,0.6561972306653158,0.7289439129619208,"{'positive': {'true': 3886, 'false': 2036}, 'negative': {'true': 3295, 'false': 1445}}"
+4,False,False,False,[],rottentomatoes,0.6757555847568988,0.7717126242731195,"{'positive': {'true': 4114, 'false': 1974}, 'negative': {'true': 3357, 'false': 1217}}"
+5,False,False,False,[],rottentomatoes,0.6548501928211213,0.8281748264865879,"{'positive': {'true': 4415, 'false': 2327}, 'negative': {'true': 3004, 'false': 916}}"
+5,False,False,False,"[3, 4, 5]",rottentomatoes,0.6755386565272496,0.7998499343462765,"{'positive': {'true': 4264, 'false': 2048}, 'negative': {'true': 3283, 'false': 1067}}"
+5,False,True,False,"[3, 4, 5]",rottentomatoes,0.6755386565272496,0.7998499343462765,"{'positive': {'true': 4264, 'false': 2048}, 'negative': {'true': 3283, 'false': 1067}}"
+7,False,False,False,"[3, 4, 5, 6, 7]",rottentomatoes,0.6605759391901769,0.8476833614706434,"{'positive': {'true': 4519, 'false': 2322}, 'negative': {'true': 3009, 'false': 812}}"

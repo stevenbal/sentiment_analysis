@@ -15,7 +15,7 @@ def apply_preprocessing(data):
     return data
 
 # Load the cleaned data from a .csv file
-data = pd.read_csv('corpora/raw/twitter/cleaned_twitter.csv', encoding="ISO-8859-1")
+data = pd.read_csv('corpora/raw/twitter/cleaned_twitter.csv', encoding='ISO-8859-1')
 
 # Set the data split percentages
 training_perc = 0.6 

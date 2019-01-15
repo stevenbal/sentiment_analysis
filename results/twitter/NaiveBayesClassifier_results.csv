@@ -1,2 +1,2 @@
-N,stemming,stopword_removal,mixture,dev_corpus,precision,recall,counts
-2,True,False,[],rottentomatoes,0.6420702556641031,0.57944100543988,"{'positive': {'true': 3089, 'false': 1722}, 'negative': {'true': 3609, 'false': 2242}}"
+N,words,stemming,stopword_removal,mixture,dev_corpus,precision,recall,counts
+2,True,True,False,[],rottentomatoes,0.6420702556641031,0.57944100543988,"{'positive': {'true': 3089, 'false': 1722}, 'negative': {'true': 3609, 'false': 2242}}"
