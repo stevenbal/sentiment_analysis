@@ -13,11 +13,12 @@ from resources.utilities import preprocess_sentence
 # TODO tf-idf? Smoothing kneser-ney
 
 class LanguageModel:
-    def __init__(self, source='', N=2, words=True, stemming=False, stopword_removal=True, model_file=''):
+    def __init__(self, Class, source='', N=2, words=True, stemming=True, stopword_removal=False, model_file=''):
         """
         Description:        constructor for an n-gram LanguageModel object with given parameters
 
         Input:
+        -Class:             str, the class to which this model belongs
         -source:            str, the name of the file containing the training
                             corpus for the n-gram model
         -N:                 int, the order of the model (default: 2)
@@ -30,6 +31,7 @@ class LanguageModel:
                             filename of a previously constructed language model
                             which will be loaded if specified
         """
+        self.Class = Class
         if source:
             self.words = words
             self.stemmer = PorterStemmer() if stemming else None
@@ -47,8 +49,8 @@ class LanguageModel:
         """
         stemming = True if self.stemmer else False
         stopword_removal = True if self.stopwords_english else False
-        parameters = [len(self.models), self.words, stemming, stopword_removal]
-        object_string = 'LanguageModel(N={}, words={}, stemming={}, stopword_removal={})'.format(*parameters)
+        parameters = [self.Class, len(self.models), self.words, stemming, stopword_removal]
+        object_string = 'LanguageModel(Class={}, N={}, words={}, stemming={}, stopword_removal={})'.format(*parameters)
         return object_string
 
     def make_models(self, filename, N):
@@ -112,10 +114,12 @@ class LanguageModel:
         -sentence:          str, the preprocessed sentence
         """
         sentence = f'<s> {sentence} </s>'
+        if self.stemmer:
+            sentence = ' '.join([self.stemmer.stem(word) for word in sentence.split()])
         if self.words:
             sentence = sentence.split()
-        if self.stemmer:
-            sentence = [self.stemmer.stem(word) for word in sentence]
+        # if self.stemmer:
+        #     sentence = [self.stemmer.stem(word) for word in sentence]
         if self.stopwords_english:
             sentence = [word for word in sentence if word not in self.stopwords_english]
         return sentence
@@ -142,6 +146,15 @@ class LanguageModel:
             words = sentence[0:i] if i-N < 0 else sentence[i-N:i]
             sentence_prob += math.log(self.get_relative_freq(self.models[:N], words))
         return sentence_prob
+
+    def get_class(self):
+        """
+        Description:    returns the class of the model object
+
+        Output:
+        -self.Class:    str, class of the model
+        """
+        return self.Class
 
     def get_models(self):
         """

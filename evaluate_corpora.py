@@ -5,6 +5,10 @@ import os
 
 import resources.LanguageModel as ngram
 import resources.NaiveBayesClassifier as NBclassifier
+import logging
+
+logging.basicConfig(filename='process_times.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 corpora_dir = 'corpora/processed/'
 
@@ -24,40 +28,41 @@ negative_path = argumentparser.negative_path
 
 # Create the n-gram models with the given settings and save them to the correct paths
 if method == 'create':
-    t1 = time()
-    LM_pos = ngram.LanguageModel(f'{corpora_dir}{training_corpus}/positive_training.csv', N=N, 
+    start = time()
+    LM_pos = ngram.LanguageModel('positive', f'{corpora_dir}{training_corpus}/positive_training.csv', N=N, 
                                  words=words, stemming=stemming, 
                                  stopword_removal=stopword_removal)
-    t2 = time()
-    LM_neg = ngram.LanguageModel(f'{corpora_dir}{training_corpus}/negative_training.csv', N=N, 
+    LM_neg = ngram.LanguageModel('negative', f'{corpora_dir}{training_corpus}/negative_training.csv', N=N, 
                                  words=words, stemming=stemming, 
                                  stopword_removal=stopword_removal)
-    t3 = time()
+    end = time()
     LM_pos.save_models(positive_path(N, words, stemming, stopword_removal, training_corpus))
     LM_neg.save_models(negative_path(N, words, stemming, stopword_removal, training_corpus))
-    print('Model construction took', t3-t1, 'seconds')
+    logging.info(f'Model construction for {training_corpus} took {end-start} seconds')
 
 # Load the n-gram models with the given settings
 if method == 'load':
     try:
-        LM_pos = ngram.LanguageModel(model_file=positive_path(N, words, stemming, stopword_removal, training_corpus))
-        LM_neg = ngram.LanguageModel(model_file=negative_path(N, words, stemming, stopword_removal, training_corpus))
+        LM_pos = ngram.LanguageModel('positive', model_file=positive_path(N, words, stemming, stopword_removal, training_corpus))
+        LM_neg = ngram.LanguageModel('negative', model_file=negative_path(N, words, stemming, stopword_removal, training_corpus))
     except:
         print('Models with the given settings cannot be loaded, please choose --method=create')
         exit()
 
 # Construct classifier from the two n-gram models
-classifier = NBclassifier.NaiveBayesClassifier(('positive', LM_pos), ('negative', LM_neg))
+classifier = NBclassifier.NaiveBayesClassifier(LM_pos, LM_neg)
 
 # Evaluate the classifier on the test set and report precision, recall and counts,
 # use a mixture model if specified
-t4 = time()
+start = time()
 precision, recall, counts = classifier.evaluate(f'{corpora_dir}{dev_corpus}/development_data.csv', mixture=mixture, prediction_thres=0)
-t5 = time()
+end = time()
 
 # precision, recall, counts = 5.0,3.0,"{'positive': {'true': 3781, 'false': 1608}, 'negative': {'true': 3723, 'false': 1550}}"
 
-print('Evaluation took', t5-t4, 'seconds')
+# mongodb?
+
+logging.info(f'Evaluation for {dev_corpus} took {end-start} seconds')
 
 def save_results(result_filename, training_corpus, **kwargs):
     """
@@ -92,6 +97,6 @@ def save_results(result_filename, training_corpus, **kwargs):
         results = pd.DataFrame([arg_values], columns=colnames)
         results.to_csv(res_path, index=False)
 
-save_results('NaiveBayesClassifier_results.csv', training_corpus, N=N, stemming=stemming,
+save_results('NaiveBayesClassifier_results.csv', training_corpus, N=N, words=words, stemming=stemming,
               stopword_removal=stopword_removal, mixture=mixture, dev_corpus=dev_corpus,
               precision=precision, recall=recall, counts=counts)

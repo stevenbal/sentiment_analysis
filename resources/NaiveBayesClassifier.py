@@ -16,7 +16,18 @@ class NaiveBayesClassifier:
         -*models:       tuple, any number of tuples containing the class the
                         LanguageModel object represents, and the LanguageModel object
         """
-        self.models = {model[0]: model[1] for model in models}
+        # self.models = {model[0]: model[1] for model in models}
+        self.models = models
+
+    def __repr__(self):
+        """
+        Description:    function that shows the representation of the class instance
+
+        Output:
+        -object_string: string that shows the model parameters of an instance
+        """
+        object_string = f'NaiveBayesClassifier({self.models})'
+        return object_string
 
     def classify(self, sentence, mixture=[], prediction_thres=0):
         """
@@ -37,16 +48,15 @@ class NaiveBayesClassifier:
         -predicted_class:   str, the class as predicted by the classifier
         """
         if mixture:
-            if max(mixture) > len(self.models['positive'].get_models()):
+            if max(mixture) > len(list(self.models.values())[0].get_models()):
                 raise ModelOrderError(max(mixture))
             results = []
             for order in mixture:
-                probs = {category: model.compute_prob(sentence, N=order) for category, model in self.models.items()}
+                probs = {model.get_class(): model.compute_prob(sentence, N=order) for model in self.models}
                 sorted_probs = sorted(probs, key=probs.get, reverse=True)
                 most_prob, second_most_prob = sorted_probs[0:2]
                 difference = abs(probs[most_prob] - probs[second_most_prob])
-                # print(probs)
-                # print(sorted_probs, difference / abs(np.mean(list(probs.values()))))
+     
                 if difference / abs(np.mean(list(probs.values()))) < prediction_thres:
                     predicted_class = 'undefined'
                 else:
@@ -55,17 +65,11 @@ class NaiveBayesClassifier:
             predicted_class = collections.Counter(results).most_common(1)[0][0]
             return predicted_class
         else:
-            probs = {category: model.compute_prob(sentence) for category, model in self.models.items()}
+            probs = {model.get_class(): model.compute_prob(sentence) for model in self.models}
             sorted_probs = sorted(probs, key=probs.get, reverse=True)
             most_prob, second_most_prob = sorted_probs[0:2]
-            # print(most_prob, second_most_prob)
-            difference = abs(probs[most_prob] - probs[second_most_prob])
 
-            # most_prob_class = max(probs, key=probs.get)
-            # perc = probs[predicted_class] / probs[min(probs, key=probs.get)]
-            # print('diff', diff)
-            # print('perc', perc)
-            # print('diff/max', diff / abs(np.mean(list(probs.values()))))
+            difference = abs(probs[most_prob] - probs[second_most_prob])
 
             if difference / abs(np.mean(list(probs.values()))) < prediction_thres:
                 predicted_class = 'undefined'
@@ -73,7 +77,7 @@ class NaiveBayesClassifier:
                 predicted_class = most_prob
             return predicted_class
 
-    def evaluate(self, filename, mixture=[], prediction_thres=0):
+    def evaluate(self, filename, mixture=[], prediction_thres=0, visual=False):
         """
         Description:        function that evaluates the performance of the classifier
                             for a given test corpus
@@ -108,7 +112,8 @@ class NaiveBayesClassifier:
         precision = self.compute_precision(results)
         recall = self.compute_recall(results)
         print(f'precision {precision}, recall {recall}')
-        visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive', 'Undefined'])
+        if visual:
+            visualize.plot_confusion_matrix(correct_labels, predicted_labels, ['Negative', 'Positive', 'Undefined'])
         return precision, recall, results
 
     def compute_precision(self, results):
