@@ -1,4 +1,4 @@
-name: sentiment-analysis
+name: sentiment_analysis
 channels:
   - defaults
 dependencies:
@@ -40,5 +40,5 @@ dependencies:
     - six==1.11.0
     - typed-ast==1.1.0
     - wrapt==1.10.11
-# prefix: /home/steven/anaconda2/envs/sentiment-analysis
+# prefix: /home/steven/anaconda2/envs/sentiment_analysis
 

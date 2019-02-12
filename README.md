@@ -10,7 +10,7 @@ user@user:~$ conda env create -f environment.yml
 ```
 The environment can be activated using:
 ```console
-user@user:~$ source activate sentiment-analysis
+user@user:~$ source activate sentiment_analysis
 ```
 
 The environment can be deactivated using:
