@@ -1,7 +1,10 @@
 # sentiment-analysis
-
 Simple Naive Bayes classifier that uses n-gram models to try and predict whether a given sentence is of positive or negative sentiment.
 
+## Installation
+Since some of the corpora are rather large, [Git LFS](https://git-lfs.github.com/) must be installed before cloning this repository.
+
+## Dependencies
 Written in Python version 3.6.2, dependencies are listed in 'environment.yml'.
 Using an environment manager such as conda, the correct packages can be easily installed
 by using the following bash command:
