@@ -6,8 +6,6 @@ sys.path.append('/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/'
 from resources.LanguageModel import LanguageModel
 from resources.NestedDict import NestedDict
 
-# test alle settings, stemming, stopword removal etc
-
 class TestLanguageModel(unittest.TestCase):
 
     @classmethod
