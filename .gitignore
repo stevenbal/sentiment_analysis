@@ -5,3 +5,12 @@ __pycache__
 backup1.py
 .vscode
 .deprecated/
+gensim_stuff.py
+gui.py
+k_means.py
+sentiment
+sql_dumper.py
+TODO
+try.py
+word_embedding.py
+models_word2vec/
