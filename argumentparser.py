@@ -6,10 +6,13 @@ parser.add_argument('--N', help='Order of n-gram model')
 parser.add_argument('--words', help='Treat words as smallest units')
 parser.add_argument('--stemming', help='Apply stemming')
 parser.add_argument('--stopword_removal', help='Remove stopwords')
-parser.add_argument('--mixture', nargs = '*', help='Specify orders of mixture model')
+parser.add_argument('--mixture', nargs = '*', help='Specify orders of \
+                                                    mixture model')
 parser.add_argument('--method', help='Specify how to obtain models')
-parser.add_argument('--training_corpus', help='Specify corpus to train the model with')
-parser.add_argument('--dev_corpus', help='Specify corpus to evaluate the model with (development data)')
+parser.add_argument('--training_corpus', help='Specify corpus to train the \
+                                               model with')
+parser.add_argument('--dev_corpus', help='Specify corpus to evaluate the model \
+                                          with (development data)')
 
 args = parser.parse_args()
 
