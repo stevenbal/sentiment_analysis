@@ -3,7 +3,8 @@ from resources.utilities import preprocess_sentence
 
 def apply_preprocessing(data):
     """
-    Description:    function that applies preprocessing to the text in the data
+    Description:    function that applies preprocessing to the text in 
+                    the data
 
     Input:
     -data:          pandas DataFrame, the data to be preprocessed
@@ -15,7 +16,8 @@ def apply_preprocessing(data):
     return data
 
 # Load the cleaned data from a .csv file
-data = pd.read_csv('corpora/raw/twitter/cleaned_twitter.csv', encoding='ISO-8859-1')
+data = pd.read_csv('corpora/raw/twitter/cleaned_twitter.csv', 
+                   encoding='ISO-8859-1')
 
 # Set the data split percentages
 training_perc = 0.6 

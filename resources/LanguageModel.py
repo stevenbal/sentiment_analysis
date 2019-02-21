@@ -11,27 +11,27 @@ from resources.NestedDict import NestedDict
 from resources.utilities import preprocess_sentence
 
 class LanguageModel:
-    def __init__(self, Class, source='', N=2, words=True, stemming=True, 
+    def __init__(self, Class, source='', N=2, words=True, stemming=True,
                  stopword_removal=False, model_file=''):
         """
-        Description:        constructor for an n-gram LanguageModel      
+        Description:        constructor for an n-gram LanguageModel
                             object with given parameters
 
         Input:
         -Class:             str, the class to which this model belongs
-        -source:            str, the name of the file containing the 
+        -source:            str, the name of the file containing the
                             training corpus for the n-gram model
         -N:                 int, the order of the model (default: 2)
-        -words:             bool, indicates whether the n-gram model is 
-                            created from words or characters 
+        -words:             bool, indicates whether the n-gram model is
+                            created from words or characters
                             (default: True)
-        -stemming:          bool, indicates whether the words are to be 
+        -stemming:          bool, indicates whether the words are to be
                             stemmed (default false)
-        -stopword_removal:  bool, indicates whether stopwords are not 
+        -stopword_removal:  bool, indicates whether stopwords are not
                             stored in the language model (default: True)
-        -model_file:        str, can be used instead of source, 
-                            indicates the filename of a previously 
-                            constructed language model which will be 
+        -model_file:        str, can be used instead of source,
+                            indicates the filename of a previously
+                            constructed language model which will be
                             loaded if specified
         """
         self.Class = Class
@@ -44,28 +44,28 @@ class LanguageModel:
                 self.stopwords_english = None
             self.models = self.make_models(source, N)
         elif model_file:
-            with open(model_file, 'rb') as f:  
-                [self.words, 
-                self.stemmer, 
-                self.stopwords_english, 
+            with open(model_file, 'rb') as f:
+                [self.words,
+                self.stemmer,
+                self.stopwords_english,
                 self.models] = pickle.load(f)
 
     def __repr__(self):
         """
-        Description:    function that shows the representation of the 
+        Description:    function that shows the representation of the
                         class instance
 
         Output:
-        -object_string: string that shows the model parameters of an 
+        -object_string: string that shows the model parameters of an
                         instance
         """
         stemming = True if self.stemmer else False
         stopword_removal = True if self.stopwords_english else False
         parameters = {
-            'Class': self.Class, 
-            'N': len(self.models), 
-            'words': self.words, 
-            'stemming': stemming, 
+            'Class': self.Class,
+            'N': len(self.models),
+            'words': self.words,
+            'stemming': stemming,
             'stopword_removal': stopword_removal
         }
         param_string = ', '.join([f'{k}={v}' for k, v in parameters.items()])
@@ -74,17 +74,17 @@ class LanguageModel:
 
     def make_models(self, filename, N):
         """
-        Description:    function that constructs the n-gram model for a 
+        Description:    function that constructs the n-gram model for a
                         given order and a given corpus directory
 
         Input:
-        -filename:      str, the name of the file containing the 
+        -filename:      str, the name of the file containing the
                         training corpus for the n-gram model
         -N:             int, the order of the model
 
         Output:
-        -models:        list, contains n-gram models from order 1 
-                        until N, constructed from text files from a 
+        -models:        list, contains n-gram models from order 1
+                        until N, constructed from text files from a
                         corpus directory
         """
         models = [NestedDict() for _ in range(N)]
@@ -100,19 +100,19 @@ class LanguageModel:
 
     def get_relative_freq(self, models, words, alpha=1.0):
         """
-        Description:    function that computes the relative frequency 
+        Description:    function that computes the relative frequency
                         for a given list of words
-        
+
         Input:
-        -models:        list, contains n-gram models from order 
+        -models:        list, contains n-gram models from order
                         1 until N
-        -words:         list, words for which the relative frequency 
+        -words:         list, words for which the relative frequency
                         will be computed
-        -alpha:         float, the number used for additive smoothing 
+        -alpha:         float, the number used for additive smoothing
                         (default: 1.0)
 
         Output:
-        -relative_freq: float, the relative frequency of the list of 
+        -relative_freq: float, the relative frequency of the list of
                         words according to the n-gram model
         """
         length = len(words)
@@ -140,26 +140,26 @@ class LanguageModel:
         """
         sentence = f'<s> {sentence} </s>'
         if self.stemmer:
-            sentence = ' '.join([self.stemmer.stem(word) 
+            sentence = ' '.join([self.stemmer.stem(word)
                                 for word in sentence.split()])
         if self.words:
             sentence = sentence.split()
         # if self.stemmer:
         #     sentence = [self.stemmer.stem(word) for word in sentence]
         if self.stopwords_english:
-            sentence = [word for word in sentence 
+            sentence = [word for word in sentence
                         if word not in self.stopwords_english]
         return sentence
-    
+
     def compute_prob(self, sentence, N=None):
         """
-        Description:        function that computes the log probability 
+        Description:        function that computes the log probability
                             of a sentence for a language model
 
         Input:
         -sentence:          str, the sentence to be classified
-        -N:                 int, if specified, uses this order of n-gram 
-                            model to compute the probability, else uses 
+        -N:                 int, if specified, uses this order of n-gram
+                            model to compute the probability, else uses
                             the max order of model (default: None)
 
         Output:
@@ -190,21 +190,21 @@ class LanguageModel:
         Description:    returns the list of n-gram models
 
         Output:
-        -self.models:   list, contains the n-gram models of this 
+        -self.models:   list, contains the n-gram models of this
                         language model
         """
         return self.models
 
     def save_models(self, filename):
         """
-        Description:    stores the n-gram models and parameters in a 
-                        pickled file that can be loaded later into a 
+        Description:    stores the n-gram models and parameters in a
+                        pickled file that can be loaded later into a
                         LanguageModel instance
 
         Input:
-        -filename:      str, the name of the file in which the data will 
+        -filename:      str, the name of the file in which the data will
                         be stored
         """
         with open(filename, 'wb') as f:
-            pickle.dump([self.words, self.stemmer, 
+            pickle.dump([self.words, self.stemmer,
                          self.stopwords_english, self.models], f)

@@ -2,7 +2,11 @@ import pandas as pd
 
 path = 'corpora/raw/reviews/'
 res_path = 'corpora/processed/'
-filenames = ['amazon_cells_labelled.txt', 'imdb_labelled.txt', 'yelp_labelled.txt']
+filenames = [
+    'amazon_cells_labelled.txt', 
+    'imdb_labelled.txt', 
+    'yelp_labelled.txt'
+]
 res_dirs = ['amazon/', 'imdb/', 'yelp/']
 
 for filename, res_dir in zip(filenames, res_dirs):

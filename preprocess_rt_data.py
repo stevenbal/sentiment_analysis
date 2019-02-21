@@ -6,8 +6,8 @@ from resources.utilities import preprocess_sentence
 
 def merge_dev_data(result_filename, file_pos, file_neg):
     """
-    Description:        function that merges dev data from both sentiments into
-                        a single data structure
+    Description:        function that merges dev data from both 
+                        sentiments into a single data structure
     Input:
     -result_filename:   str, name of the file to write the result to
     -file_pos:          str, name of file containing positive dev data
@@ -30,12 +30,12 @@ def merge_dev_data(result_filename, file_pos, file_neg):
 
 def merge_training_data(result_filename, original_dir, sentiment):
     """
-    Description:            function that merges the training text files for the 
-                            positive and negative directories
+    Description:            function that merges the training text files 
+                            for the positive and negative directories
 
     Input:
-    -result_filename_pos:   str, name of the file that will contain training data
-                            for the given sentiment
+    -result_filename_pos:   str, name of the file that will contain 
+                            training data for the given sentiment
     -original_dir:          str, the directory containing the text files
     -sentiment:             str, the sentiment of the given text files
     """
@@ -43,7 +43,9 @@ def merge_training_data(result_filename, original_dir, sentiment):
     for filename in os.listdir(original_dir):
         with open(f'{original_dir}/{filename}', errors='replace') as text:
             txt = text.readlines()
-            data = pd.DataFrame(list(zip([preprocess_sentence(line) for line in txt], [sentiment]*len(txt))))
+            preprocessed_lines = [preprocess_sentence(line) for line in txt]
+            data = pd.DataFrame(list(zip(preprocessed_lines, 
+                                         [sentiment]*len(txt))))
             df = df.append(data)
             text.close()
     df.columns = ['text', 'sentiment']
@@ -60,10 +62,13 @@ training_positive_path = 'corpora/raw/review_polarity/txt_sentoken/pos'
 training_negative_path = 'corpora/raw/review_polarity/txt_sentoken/neg'
 
 # Merge the training text files for positive and negative
-merge_training_data(f'{result_dir}positive_training.csv', training_positive_path, 'positive')
-merge_training_data(f'{result_dir}negative_training.csv', training_negative_path, 'negative')
+merge_training_data(f'{result_dir}positive_training.csv', 
+                    training_positive_path, 'positive')
+merge_training_data(f'{result_dir}negative_training.csv', 
+                    training_negative_path, 'negative')
 
 # Merge the development data and save it to a .csv file
 dev_positive_path = 'corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.pos'
 dev_negative_path = 'corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.neg'
-merge_dev_data(f'{result_dir}development_data.csv', dev_positive_path, dev_negative_path)
+merge_dev_data(f'{result_dir}development_data.csv', dev_positive_path, 
+               dev_negative_path)
