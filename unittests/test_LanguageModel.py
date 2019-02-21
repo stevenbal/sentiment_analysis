@@ -17,8 +17,6 @@ class TestLanguageModel(unittest.TestCase):
         cls.test_model_path = 'unittests/unittest_models/test_model.p'
 
     def test_init_from_source_corpus(self):
-        # LM_pos = LanguageModel('positive', source=self.__class__.path, 
-        #                        stemming=False)
         correct = [
             NestedDict({'<s>': 2, 'wow': 1, 'this': 1, 'is': 1, 'great': 2, 
                         '</s>': 2, 'what': 1, 'a': 1, 'story': 1}), 
