@@ -19,4 +19,4 @@ if __name__ == '__main__':
     else:
         sentence = input('Please enter a sentence: ')
 
-    print(classifier.classify(sentence, mixture=[], prediction_thres=0.02))
+    print(classifier.classify(sentence, prediction_thres=0.02))

@@ -3,7 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
-def plot_confusion_matrix(correct_labels, predicted_labels, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+def plot_confusion_matrix(correct_labels, predicted_labels, classes, 
+                          normalize=False, title='Confusion matrix', 
+                          cmap=plt.cm.Blues):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
