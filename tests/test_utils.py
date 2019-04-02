@@ -1,11 +1,12 @@
+from resources.utilities import preprocess_sentence
 import unittest
 
 import sys
-sys.path.append('/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/')
+sys.path.append(
+    '/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/')
 
-from resources.utilities import preprocess_sentence
 
-class TestUtils(unittest.TestCase):   
+class TestUtils(unittest.TestCase):
     def test_preprocess_urls(self):
         sentence = '''
         http://www.teavcx123ald.nl/test
@@ -41,7 +42,9 @@ class TestUtils(unittest.TestCase):
         gooed&*aal
         '''
         result = preprocess_sentence(sentence)
-        self.assertEqual(result, 'willbe removed multiple spaces test gooedaal')
+        self.assertEqual(
+            result, 'willbe removed multiple spaces test gooedaal')
+
 
 if __name__ == '__main__':
     unittest.main()

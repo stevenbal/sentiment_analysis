@@ -5,20 +5,23 @@ Simple Naive Bayes classifier that uses n-gram models to try and predict whether
 Since some of the corpora are rather large, [Git LFS](https://git-lfs.github.com/) must be installed before cloning this repository.
 
 ## Dependencies
-Written in Python version 3.6.2, dependencies are listed in 'environment.yml'.
-Using an environment manager such as conda, the correct packages can be easily installed
-by using the following bash command:
+Written in Python version 3.6.7, dependencies are listed in 'requirements.txt'.
+Using virtualenv the dependencies can be installed as follows:
 ```console
-user@user:~$ conda env create -f environment.yml
+user@user:~$ virtualenv env
 ```
 The environment can be activated using:
 ```console
-user@user:~$ source activate sentiment_analysis
+user@user:~$ source env/bin/activate
+```
+
+```console
+user@user:~$ pip install -r requirements.txt
 ```
 
 The environment can be deactivated using:
 ```console
-user@user:~$ source deactivate
+user@user:~$ deactivate
 ```
 
 ## Directory descriptions

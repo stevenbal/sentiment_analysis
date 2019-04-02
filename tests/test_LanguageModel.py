@@ -1,27 +1,28 @@
+# import sys
+# sys.path.append(
+#     '/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/')
+
+from resources.NestedDict import NestedDict
+from resources.LanguageModel import LanguageModel
 import unittest
 
-import sys
-sys.path.append('/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/')
-
-from resources.LanguageModel import LanguageModel
-from resources.NestedDict import NestedDict
 
 class TestLanguageModel(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        path = 'unittests/unittest_corpora/processed/positive_training.csv'
+        path = 'tests/unittest_corpora/processed/positive_training.csv'
         cls.LM_pos = LanguageModel('positive', source=path, stemming=False)
-        cls.test_model_path = 'unittests/unittest_models/test_model.p'
+        cls.test_model_path = 'tests/unittest_models/test_model.p'
 
     def test_init_from_source_corpus(self):
         correct = [
-            NestedDict({'<s>': 2, 'wow': 1, 'this': 1, 'is': 1, 'great': 2, 
-                        '</s>': 2, 'what': 1, 'a': 1, 'story': 1}), 
-            NestedDict({'<s>': {'wow': 1, 'what': 1}, 'wow': {'this': 1}, 
-                        'this': {'is': 1}, 'is': {'great': 1}, 
-                        'great': {'</s>': 1, 'story': 1}, 
-                        'what': {'a': 1}, 'a': {'great': 1}, 
+            NestedDict({'<s>': 2, 'wow': 1, 'this': 1, 'is': 1, 'great': 2,
+                        '</s>': 2, 'what': 1, 'a': 1, 'story': 1}),
+            NestedDict({'<s>': {'wow': 1, 'what': 1}, 'wow': {'this': 1},
+                        'this': {'is': 1}, 'is': {'great': 1},
+                        'great': {'</s>': 1, 'story': 1},
+                        'what': {'a': 1}, 'a': {'great': 1},
                         'story': {'</s>': 1}})
         ]
         for i, model in enumerate(self.LM_pos.get_models()):
@@ -43,6 +44,7 @@ class TestLanguageModel(unittest.TestCase):
 
     def test_init_chars(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()
