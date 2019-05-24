@@ -1,9 +1,9 @@
 .ipynb_checkpoints/
 *.pyc
-__pycache__
+__pycache__/
 *.ipynb
 backup1.py
-.vscode
+.vscode/
 .deprecated/
 gensim_stuff.py
 gui.py
@@ -15,4 +15,4 @@ try.py
 word_embedding.py
 models_word2vec/
 env/
-environment.yml
+src/corpora/raw/
