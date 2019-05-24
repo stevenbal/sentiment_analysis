@@ -15,3 +15,4 @@ try.py
 word_embedding.py
 models_word2vec/
 env/
+corpora/raw/
