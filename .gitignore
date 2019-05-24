@@ -1,6 +1,6 @@
 .ipynb_checkpoints/
 *.pyc
-__pycache__
+__pycache__/
 *.ipynb
 backup1.py
 .vscode/
@@ -15,4 +15,4 @@ try.py
 word_embedding.py
 models_word2vec/
 env/
-corpora/raw/
+src/corpora/raw/
