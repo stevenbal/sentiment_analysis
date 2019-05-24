@@ -22,23 +22,23 @@ user@user:~$ source deactivate
 ```
 
 ## Directory descriptions
-### corpora/processed/
+### src/corpora/processed/
 Contains different corpora of which the format has been standardized as follows:
 - Two .csv files for training data: one for positive and one for negative examples
 - One .csv file for development data, used to evaluate the classifier
 - Optional if the corpus is large enough: one .csv file for testing data
 
-### corpora/raw/
+### src/corpora/raw/
 Contains the raw corpus data
 
-### models/
+### src/models/
 Contains n-gram models that were created with specific settings and saved, used to
 save time when classifying by loading instead of recreating certain models
 
-### resources/
+### src/resources/
 Contains the class files that are used in the scripts
 
-### results/
+### src/results/
 Contains preliminary results for each different training corpus
 
 ## Basic command line functionality

@@ -3,7 +3,7 @@
 __pycache__
 *.ipynb
 backup1.py
-.vscode
+.vscode/
 .deprecated/
 gensim_stuff.py
 gui.py
@@ -14,3 +14,4 @@ TODO
 try.py
 word_embedding.py
 models_word2vec/
+env/
