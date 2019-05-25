@@ -15,4 +15,4 @@ try.py
 word_embedding.py
 models_word2vec/
 env/
-src/corpora/raw/
+sentiment_analysis/corpora/raw/
