@@ -1,4 +1,4 @@
-from resources.NaiveBayesClassifier import NaiveBayesClassifier
+from resources.naive_bayes_classifier import NaiveBayesClassifier
 import unittest
 
 # import sys

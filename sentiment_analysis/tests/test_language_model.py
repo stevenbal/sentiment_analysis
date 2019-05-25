@@ -1,5 +1,5 @@
-from resources.NestedDict import NestedDict
-from resources.LanguageModel import LanguageModel
+from resources.nested_dict import NestedDict
+from resources.language_model import LanguageModel
 import unittest
 from settings import BASE_DIR
 import os

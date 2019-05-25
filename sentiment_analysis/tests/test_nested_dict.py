@@ -1,4 +1,4 @@
-from resources.NestedDict import NestedDict
+from resources.nested_dict import NestedDict
 import unittest
 
 # import sys
