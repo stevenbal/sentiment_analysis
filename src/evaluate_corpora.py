@@ -4,11 +4,12 @@ import pandas as pd
 import os
 from settings import BASE_DIR
 
-import resources.LanguageModel as ngram
-import resources.NaiveBayesClassifier as NBclassifier
+import resources.language_model as ngram
+import resources.naive_bayes_classifier as NBclassifier
 import logging
 
-logging.basicConfig(filename='process_times.log', level=logging.INFO,
+logging_filename = os.path.join(BASE_DIR, 'logging', 'process_times.log')
+logging.basicConfig(filename=logging_filename, level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 corpora_dir = os.path.join(BASE_DIR, 'corpora/processed/')

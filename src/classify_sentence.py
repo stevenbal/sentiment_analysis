@@ -3,8 +3,8 @@ from time import time
 from settings import BASE_DIR
 import os
 
-import resources.LanguageModel as ngram
-import resources.NaiveBayesClassifier as NBclassifier
+import resources.language_model as ngram
+import resources.naive_bayes_classifier as NBclassifier
 
 # Load the ngram models for negative and positive sentiments, n=2 with stemming
 model_file_pos = os.path.join(
