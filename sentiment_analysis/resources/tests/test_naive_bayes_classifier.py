@@ -1,0 +1,2 @@
+from resources.naive_bayes_classifier import NaiveBayesClassifier
+import pytest
