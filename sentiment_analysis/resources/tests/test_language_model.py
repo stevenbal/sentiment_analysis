@@ -1,16 +1,16 @@
 from resources.nested_dict import NestedDict
 from resources.language_model import LanguageModel
-import unittest
+import pytest
 from settings import BASE_DIR
 import os
 
-class LanguageModelTests(unittest.TestCase):
-
+class TestLanguageModel:
+    
     @classmethod
-    def setUpClass(cls):
-        path = os.path.join(BASE_DIR, 'tests/unittest_corpora/processed/positive_training.csv')
+    def setup_class(cls):
+        path = os.path.join(BASE_DIR, 'resources/tests/unittest_corpora/processed/positive_training.csv')
         cls.LM_pos = LanguageModel('positive', source=path, stemming=False)
-        cls.test_model_path = os.path.join(BASE_DIR, 'tests/unittest_models/test_model.p')
+        cls.test_model_path = os.path.join(BASE_DIR, 'resources/tests/unittest_models/test_model.p')
 
     def test_init_from_source_corpus(self):
         correct = [
@@ -23,12 +23,13 @@ class LanguageModelTests(unittest.TestCase):
                         'story': {'</s>': 1}})
         ]
         for i, model in enumerate(self.LM_pos.get_models()):
-            self.assertDictEqual(model, correct[i])
+            assert model == correct[i]
 
     def test_save_model_and_init_from_model_file(self):
         self.LM_pos.save_models(self.test_model_path)
         new_model = LanguageModel('positive', model_file=self.test_model_path)
-        self.assertDictEqual(new_model.__dict__, self.LM_pos.__dict__)
+
+        assert new_model.__dict__ == self.LM_pos.__dict__
 
     def test_init_N(self):
         pass
@@ -41,7 +42,3 @@ class LanguageModelTests(unittest.TestCase):
 
     def test_init_chars(self):
         pass
-
-
-if __name__ == '__main__':
-    unittest.main()

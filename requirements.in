@@ -1,0 +1,13 @@
+autopep8
+gensim
+isort
+matplotlib
+nltk
+numpy
+pandas
+pylint
+pytest
+regex
+requests
+scikit-learn
+scipy

@@ -1,12 +1,13 @@
-from resources.utilities import preprocess_sentence
-import unittest
+from ..utilities import preprocess_sentence
+import pytest
 
 # import sys
 # sys.path.append(
 #     '/home/steven/Documents/Projects/Python/NLP/sentiment_analysis/')
 
 
-class UtilTests(unittest.TestCase):
+class TestUtils:
+
     def test_preprocess_urls(self):
         sentence = '''
         http://www.teavcx123ald.nl/test
@@ -16,7 +17,8 @@ class UtilTests(unittest.TestCase):
         www.pasd2p23en.nl
         '''
         result = preprocess_sentence(sentence)
-        self.assertEqual(result, '')
+
+        assert result == ''
 
     def test_preprocess_email_and_twitter_mentions(self):
         sentence = '''
@@ -24,7 +26,8 @@ class UtilTests(unittest.TestCase):
         t23est@sit32e.nl
         '''
         result = preprocess_sentence(sentence)
-        self.assertEqual(result, 'tes')
+
+        assert result == 'tes'
 
     def test_preprocess_slashed_and_hyphenated(self):
         sentence = '''
@@ -33,7 +36,8 @@ class UtilTests(unittest.TestCase):
         sea-lions
         '''
         result = preprocess_sentence(sentence)
-        self.assertEqual(result, 'him her this that sea lions')
+
+        assert result == 'him her this that sea lions'
 
     def test_preprocess_nonalphanumeric_removal(self):
         sentence = '''
@@ -42,9 +46,5 @@ class UtilTests(unittest.TestCase):
         gooed&*aal
         '''
         result = preprocess_sentence(sentence)
-        self.assertEqual(
-            result, 'willbe removed multiple spaces test gooedaal')
 
-
-if __name__ == '__main__':
-    unittest.main()
+        assert result == 'willbe removed multiple spaces test gooedaal'
