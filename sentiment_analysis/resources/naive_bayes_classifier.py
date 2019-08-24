@@ -30,7 +30,7 @@ class NaiveBayesClassifier:
         -object_string: string that shows the model parameters of an
                         instance
         """
-        object_string = f'NaiveBayesClassifier({self.models})'
+        object_string = f"NaiveBayesClassifier({self.models})"
         return object_string
 
     def classify(self, sentence, mixture=None, prediction_thres=0):
@@ -69,7 +69,7 @@ class NaiveBayesClassifier:
 
                 mean_abs_log_prob = abs(np.mean(list(probs.values())))
                 if diff / mean_abs_log_prob < prediction_thres:
-                    predicted_class = 'undefined'
+                    predicted_class = "undefined"
                 else:
                     predicted_class = most_prob
                 results.append(predicted_class)
@@ -78,8 +78,7 @@ class NaiveBayesClassifier:
             return predicted_class
         else:
             probs = {
-                model.get_class(): model.compute_prob(sentence)
-                for model in self.models
+                model.get_class(): model.compute_prob(sentence) for model in self.models
             }
             sorted_probs = sorted(probs, key=probs.get, reverse=True)
             most_prob, second_most_prob = sorted_probs[0:2]
@@ -88,13 +87,12 @@ class NaiveBayesClassifier:
 
             mean_abs_log_prob = abs(np.mean(list(probs.values())))
             if diff / mean_abs_log_prob < prediction_thres:
-                predicted_class = 'undefined'
+                predicted_class = "undefined"
             else:
                 predicted_class = most_prob
             return predicted_class
 
-    def evaluate(self, filename, mixture=None, prediction_thres=0,
-                 visual=False):
+    def evaluate(self, filename, mixture=None, prediction_thres=0, visual=False):
         """
         Description:        function that evaluates the performance of
                             the classifier for a given test corpus
@@ -115,32 +113,32 @@ class NaiveBayesClassifier:
                             positives and true and false negatives
         """
         results = {
-            'positive': {'true': 0, 'false': 0},
-            'negative': {'true': 0, 'false': 0}
+            "positive": {"true": 0, "false": 0},
+            "negative": {"true": 0, "false": 0},
         }
         correct_labels = []
         predicted_labels = []
         data = pd.read_csv(filename, encoding="ISO-8859-1")
         for index, row in data.iterrows():
-            sentiment = row['sentiment']
+            sentiment = row["sentiment"]
             correct_labels.append(sentiment)
-            prediction = self.classify(row['text'], mixture=mixture,
-                                       prediction_thres=prediction_thres)
+            prediction = self.classify(
+                row["text"], mixture=mixture, prediction_thres=prediction_thres
+            )
             predicted_labels.append(prediction)
-            if prediction == 'undefined':
+            if prediction == "undefined":
                 continue
             if prediction == sentiment:
-                results[sentiment]['true'] += 1
+                results[sentiment]["true"] += 1
             else:
-                results[prediction]['false'] += 1
+                results[prediction]["false"] += 1
         precision = self.compute_precision(results)
         recall = self.compute_recall(results)
-        print(f'precision {precision}, recall {recall}')
+        print(f"precision {precision}, recall {recall}")
         if visual:
-            visualize.plot_confusion_matrix(correct_labels, predicted_labels,
-                                            ['Negative',
-                                             'Positive',
-                                             'Undefined'])
+            visualize.plot_confusion_matrix(
+                correct_labels, predicted_labels, ["Negative", "Positive", "Undefined"]
+            )
         return precision, recall, results
 
     def compute_precision(self, results):
@@ -155,9 +153,9 @@ class NaiveBayesClassifier:
         Output:
         -precision:     float, precision as produced by classifier
         """
-        true_pos = results['positive']['true']
-        false_pos = results['positive']['false']
-        if (true_pos + false_pos):
+        true_pos = results["positive"]["true"]
+        false_pos = results["positive"]["false"]
+        if true_pos + false_pos:
             precision = true_pos / (true_pos + false_pos)
         else:
             precision = 0
@@ -175,9 +173,9 @@ class NaiveBayesClassifier:
         Output:
         -recall:        float, recall as produced by classifier
         """
-        true_pos = results['positive']['true']
-        false_neg = results['negative']['false']
-        if (true_pos + false_neg):
+        true_pos = results["positive"]["true"]
+        false_neg = results["negative"]["false"]
+        if true_pos + false_neg:
             recall = true_pos / (true_pos + false_neg)
         else:
             recall = 0
@@ -186,4 +184,5 @@ class NaiveBayesClassifier:
 
 class ModelOrderError(ValueError):
     """Indicates that an invaled order for a mixture model was given"""
+
     pass

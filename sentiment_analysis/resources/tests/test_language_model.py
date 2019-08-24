@@ -4,30 +4,52 @@ import pytest
 from settings import BASE_DIR
 import os
 
+
 class TestLanguageModel:
-    
     @classmethod
     def setup_class(cls):
-        path = os.path.join(BASE_DIR, 'resources/tests/unittest_corpora/processed/positive_training.csv')
-        cls.LM_pos = LanguageModel('positive', source=path, stemming=False)
-        cls.test_model_path = os.path.join(BASE_DIR, 'resources/tests/unittest_models/test_model.p')
+        path = os.path.join(
+            BASE_DIR, "resources/tests/unittest_corpora/processed/positive_training.csv"
+        )
+        cls.LM_pos = LanguageModel("positive", source=path, stemming=False)
+        cls.test_model_path = os.path.join(
+            BASE_DIR, "resources/tests/unittest_models/test_model.p"
+        )
 
     def test_init_from_source_corpus(self):
         correct = [
-            NestedDict({'<s>': 2, 'wow': 1, 'this': 1, 'is': 1, 'great': 2,
-                        '</s>': 2, 'what': 1, 'a': 1, 'story': 1}),
-            NestedDict({'<s>': {'wow': 1, 'what': 1}, 'wow': {'this': 1},
-                        'this': {'is': 1}, 'is': {'great': 1},
-                        'great': {'</s>': 1, 'story': 1},
-                        'what': {'a': 1}, 'a': {'great': 1},
-                        'story': {'</s>': 1}})
+            NestedDict(
+                {
+                    "<s>": 2,
+                    "wow": 1,
+                    "this": 1,
+                    "is": 1,
+                    "great": 2,
+                    "</s>": 2,
+                    "what": 1,
+                    "a": 1,
+                    "story": 1,
+                }
+            ),
+            NestedDict(
+                {
+                    "<s>": {"wow": 1, "what": 1},
+                    "wow": {"this": 1},
+                    "this": {"is": 1},
+                    "is": {"great": 1},
+                    "great": {"</s>": 1, "story": 1},
+                    "what": {"a": 1},
+                    "a": {"great": 1},
+                    "story": {"</s>": 1},
+                }
+            ),
         ]
         for i, model in enumerate(self.LM_pos.get_models()):
             assert model == correct[i]
 
     def test_save_model_and_init_from_model_file(self):
         self.LM_pos.save_models(self.test_model_path)
-        new_model = LanguageModel('positive', model_file=self.test_model_path)
+        new_model = LanguageModel("positive", model_file=self.test_model_path)
 
         assert new_model.__dict__ == self.LM_pos.__dict__
 
