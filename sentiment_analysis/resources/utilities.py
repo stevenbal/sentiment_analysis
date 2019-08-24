@@ -15,14 +15,13 @@ def preprocess_sentence(sentence):
     """
     sentence = sentence.lower()
     # Remove website links
-    sentence = re.sub(r'(https?:\/\/(www)?[^\s]*)|(www\.[^\s]*)', '',
-                      sentence)
+    sentence = re.sub(r"(https?:\/\/(www)?[^\s]*)|(www\.[^\s]*)", "", sentence)
     # Remove twitter mentions and email addresses
-    sentence = re.sub(r'[^\s]*@[^\s]*', '', sentence)
+    sentence = re.sub(r"[^\s]*@[^\s]*", "", sentence)
     # Break up slashed and hyphenated words
-    sentence = re.sub(r'(?<=[^\s])(\/|-)(?=[^\s])', ' ', sentence)
+    sentence = re.sub(r"(?<=[^\s])(\/|-)(?=[^\s])", " ", sentence)
     # Remove all non alphanumeric characters
-    sentence = re.sub(r'[^a-z0-9\s]', '', sentence)
+    sentence = re.sub(r"[^a-z0-9\s]", "", sentence)
     # Split and join with a single space between words
-    sentence = ' '.join(sentence.split())
+    sentence = " ".join(sentence.split())
     return sentence

@@ -12,8 +12,16 @@ from resources.utilities import preprocess_sentence
 
 
 class LanguageModel:
-    def __init__(self, Class, source='', N=2, words=True, stemming=True,
-                 stopword_removal=False, model_file=''):
+    def __init__(
+        self,
+        Class,
+        source="",
+        N=2,
+        words=True,
+        stemming=True,
+        stopword_removal=False,
+        model_file="",
+    ):
         """
         Description:        constructor for an n-gram LanguageModel
                             object with given parameters
@@ -40,16 +48,18 @@ class LanguageModel:
             self.words = words
             self.stemmer = PorterStemmer() if stemming else None
             if stopword_removal:
-                self.stopwords_english = stopwords.words('english')
+                self.stopwords_english = stopwords.words("english")
             else:
                 self.stopwords_english = None
             self.models = self.make_models(source, N)
         elif model_file:
-            with open(model_file, 'rb') as f:
-                [self.words,
-                 self.stemmer,
-                 self.stopwords_english,
-                 self.models] = pickle.load(f)
+            with open(model_file, "rb") as f:
+                [
+                    self.words,
+                    self.stemmer,
+                    self.stopwords_english,
+                    self.models,
+                ] = pickle.load(f)
 
     def __repr__(self):
         """
@@ -63,14 +73,14 @@ class LanguageModel:
         stemming = True if self.stemmer else False
         stopword_removal = True if self.stopwords_english else False
         parameters = {
-            'Class': self.Class,
-            'N': len(self.models),
-            'words': self.words,
-            'stemming': stemming,
-            'stopword_removal': stopword_removal
+            "Class": self.Class,
+            "N": len(self.models),
+            "words": self.words,
+            "stemming": stemming,
+            "stopword_removal": stopword_removal,
         }
-        param_string = ', '.join([f'{k}={v}' for k, v in parameters.items()])
-        object_string = f'LanguageModel({param_string})'
+        param_string = ", ".join([f"{k}={v}" for k, v in parameters.items()])
+        object_string = f"LanguageModel({param_string})"
         return object_string
 
     def make_models(self, filename, N):
@@ -91,11 +101,11 @@ class LanguageModel:
         models = [NestedDict() for _ in range(N)]
         data = pd.read_csv(filename, encoding="ISO-8859-1")
         for index, row in data.iterrows():
-            line = row['text']
+            line = row["text"]
             line = self.apply_modifications(line)
             for j in range(1, N + 1):
                 for i in range(j, len(line) + 1):
-                    words = line[i - j:i]
+                    words = line[i - j : i]
                     models[j - 1].add_by_path(words, 1)
         return models
 
@@ -119,13 +129,15 @@ class LanguageModel:
         length = len(words)
         voc_size = len(models[0].values())
         if length == 1:
-            relative_freq = (models[0].get_by_path(words) + alpha) \
-                / float(sum(models[0].values()) + alpha * voc_size)
+            relative_freq = (models[0].get_by_path(words) + alpha) / float(
+                sum(models[0].values()) + alpha * voc_size
+            )
         else:
             ngram_freq = models[length - 1].get_by_path(words)
             n_min_one_freq = models[length - 2].get_by_path(words[:-1])
-            relative_freq = (ngram_freq + alpha) \
-                / float(n_min_one_freq + alpha * voc_size)
+            relative_freq = (ngram_freq + alpha) / float(
+                n_min_one_freq + alpha * voc_size
+            )
         return relative_freq
 
     def apply_modifications(self, sentence):
@@ -139,17 +151,15 @@ class LanguageModel:
         Output:
         -sentence:      str, the preprocessed sentence
         """
-        sentence = f'<s> {sentence} </s>'
+        sentence = f"<s> {sentence} </s>"
         if self.stemmer:
-            sentence = ' '.join([self.stemmer.stem(word)
-                                 for word in sentence.split()])
+            sentence = " ".join([self.stemmer.stem(word) for word in sentence.split()])
         if self.words:
             sentence = sentence.split()
         # if self.stemmer:
         #     sentence = [self.stemmer.stem(word) for word in sentence]
         if self.stopwords_english:
-            sentence = [word for word in sentence
-                        if word not in self.stopwords_english]
+            sentence = [word for word in sentence if word not in self.stopwords_english]
         return sentence
 
     def compute_prob(self, sentence, N=None):
@@ -172,7 +182,7 @@ class LanguageModel:
         if not N:
             N = len(self.models)
         for i in range(1, len(sentence) + 1):
-            words = sentence[0:i] if i - N < 0 else sentence[i - N:i]
+            words = sentence[0:i] if i - N < 0 else sentence[i - N : i]
             relative_freq = self.get_relative_freq(self.models[:N], words)
             sentence_prob += math.log(relative_freq)
         return sentence_prob
@@ -206,6 +216,7 @@ class LanguageModel:
         -filename:      str, the name of the file in which the data will
                         be stored
         """
-        with open(filename, 'wb') as f:
-            pickle.dump([self.words, self.stemmer,
-                         self.stopwords_english, self.models], f)
+        with open(filename, "wb") as f:
+            pickle.dump(
+                [self.words, self.stemmer, self.stopwords_english, self.models], f
+            )
