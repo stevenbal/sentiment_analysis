@@ -2,9 +2,10 @@ autopep8
 gensim
 isort
 matplotlib
-nltk
+nltk>=3.4.5
 numpy
 pandas
+pip-tools
 pylint
 pytest
 regex
