@@ -1,6 +1,5 @@
 autopep8
 black
-gensim
 isort
 matplotlib
 nltk>=3.4.5
@@ -10,6 +9,4 @@ pip-tools
 pylint
 pytest
 regex
-requests
 scikit-learn
-scipy
