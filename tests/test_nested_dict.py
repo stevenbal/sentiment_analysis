@@ -1,4 +1,4 @@
-from resources.nested_dict import NestedDict
+from sentiment_analysis.resources.nested_dict import NestedDict
 import pytest
 
 # import sys

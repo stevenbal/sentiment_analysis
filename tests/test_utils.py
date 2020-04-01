@@ -1,4 +1,4 @@
-from ..utilities import preprocess_sentence
+from sentiment_analysis.resources.utilities import preprocess_sentence
 import pytest
 
 # import sys

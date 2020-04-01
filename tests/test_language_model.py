@@ -1,20 +1,15 @@
-from resources.nested_dict import NestedDict
-from resources.language_model import LanguageModel
+from sentiment_analysis.resources.nested_dict import NestedDict
+from sentiment_analysis.resources.language_model import LanguageModel
 import pytest
-from settings import BASE_DIR
 import os
 
 
 class TestLanguageModel:
     @classmethod
     def setup_class(cls):
-        path = os.path.join(
-            BASE_DIR, "resources/tests/unittest_corpora/processed/positive_training.csv"
-        )
-        cls.LM_pos = LanguageModel("positive", source=path, stemming=False)
-        cls.test_model_path = os.path.join(
-            BASE_DIR, "resources/tests/unittest_models/test_model.p"
-        )
+        path = os.path.join(os.getcwd(), 'tests/unittest_corpora/processed/positive_training.csv')
+        cls.LM_pos = LanguageModel('positive', source=path, stemming=False)
+        cls.test_model_path = os.path.join(os.getcwd(), 'tests/unittest_models/test_model.p')
 
     def test_init_from_source_corpus(self):
         correct = [
