@@ -7,8 +7,8 @@ from nltk.corpus import stopwords
 import pandas as pd
 from copy import copy
 
-from resources.nested_dict import NestedDict
-from resources.utilities import preprocess_sentence
+from .nested_dict import NestedDict
+from .utilities import preprocess_sentence
 
 
 class LanguageModel:

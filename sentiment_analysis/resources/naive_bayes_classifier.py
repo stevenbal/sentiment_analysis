@@ -1,8 +1,8 @@
 import collections
 import csv
 
-import resources.visualize as visualize
-from resources.language_model import LanguageModel
+from . import visualize
+from .language_model import LanguageModel
 import numpy as np
 import pandas as pd
 
