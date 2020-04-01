@@ -1,8 +1,7 @@
 import argparse
 import os
-from settings import BASE_DIR
 
-models_dir = os.path.join(BASE_DIR, "models/")
+models_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "models/")
 
 parser = argparse.ArgumentParser()
 

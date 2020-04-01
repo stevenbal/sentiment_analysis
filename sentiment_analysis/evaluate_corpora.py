@@ -2,18 +2,19 @@ from time import time
 import argumentparser
 import pandas as pd
 import os
-from settings import BASE_DIR
 
 import resources.language_model as ngram
 import resources.naive_bayes_classifier as NBclassifier
 import logging
 
-logging_filename = os.path.join(BASE_DIR, "logging", "process_times.log")
-logging.basicConfig(
-    filename=logging_filename,
-    level=logging.INFO,
-    format="%(asctime)s:%(levelname)s:%(message)s",
-)
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+
+# logging_filename = os.path.join(BASE_DIR, "logging", "process_times.log")
+# logging.basicConfig(
+#     filename=logging_filename,
+#     level=logging.INFO,
+#     format="%(asctime)s:%(levelname)s:%(message)s",
+# )
 
 corpora_dir = os.path.join(BASE_DIR, "corpora/processed/")
 
@@ -60,10 +61,10 @@ if method == "create":
     end = time()
     LM_pos.save_models(positive_path)
     LM_neg.save_models(negative_path)
-    logging.info(
-        f"Model construction for {train_corpus} took {end-start} \
-                   seconds"
-    )
+    # logging.info(
+    #     f"Model construction for {train_corpus} took {end-start} \
+    #                seconds"
+    # )
 
 # Load the n-gram models with the given settings
 if method == "load":
@@ -89,7 +90,7 @@ precision, recall, counts = classifier.evaluate(
 )
 end = time()
 
-logging.info(f"Evaluation for {dev_corpus} took {end-start} seconds")
+# logging.info(f"Evaluation for {dev_corpus} took {end-start} seconds")
 
 
 def save_results(result_filename, train_corpus, **kwargs):
