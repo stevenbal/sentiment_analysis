@@ -1,2 +1,0 @@
-from sentiment_analysis.resources.naive_bayes_classifier import NaiveBayesClassifier
-import pytest
