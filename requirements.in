@@ -2,11 +2,8 @@ autopep8
 black
 isort
 matplotlib
-nltk>=3.4.5
 numpy
 pandas
-pip-tools
-pylint
 pytest
-regex
 scikit-learn
+git+https://github.com/stevenbal/ngram.git@master
