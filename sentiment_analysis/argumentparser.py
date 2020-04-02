@@ -12,19 +12,16 @@ parser.add_argument("--stopword_removal", help="Remove stopwords")
 parser.add_argument(
     "--mixture",
     nargs="*",
-    help="Specify orders of \
-                                                    mixture model",
+    help="Specify orders of mixture model",
 )
 parser.add_argument("--method", help="Specify how to obtain models")
 parser.add_argument(
     "--train_corpus",
-    help="Specify corpus to train the \
-                                               model with",
+    help="Specify corpus to train the model with",
 )
 parser.add_argument(
     "--dev_corpus",
-    help="Specify corpus to evaluate the model \
-                                          with (development data)",
+    help="Specify corpus to evaluate the model with (development data)",
 )
 
 arguments = parser.parse_args()
