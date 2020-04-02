@@ -1,10 +1,10 @@
 import csv
 import pandas as pd
 import os
-from settings import BASE_DIR
 import numpy as np
-from resources.utilities import preprocess_sentence
 
+
+BASE_DIR = os.getcwd()
 
 def merge_dev_data(result_filename, file_pos, file_neg):
     """
@@ -18,11 +18,11 @@ def merge_dev_data(result_filename, file_pos, file_neg):
     merged_data = []
     with open(file_pos, errors="replace") as text:
         txt = text.readlines()
-        merged_data += [(preprocess_sentence(line), "positive") for line in txt]
+        merged_data += [(line, "positive") for line in txt]
         text.close()
     with open(file_neg, errors="replace") as text:
         txt = text.readlines()
-        merged_data += [(preprocess_sentence(line), "negative") for line in txt]
+        merged_data += [(line, "negative") for line in txt]
         text.close()
     df = pd.DataFrame(merged_data, columns=["text", "sentiment"])
     df["text"] = df["text"].apply(lambda x: x.strip())
@@ -46,8 +46,7 @@ def merge_training_data(result_filename, original_dir, sentiment):
     for filename in os.listdir(original_dir):
         with open(f"{original_dir}/{filename}", errors="replace") as text:
             txt = text.readlines()
-            preprocessed_lines = [preprocess_sentence(line) for line in txt]
-            data = pd.DataFrame(list(zip(preprocessed_lines, [sentiment] * len(txt))))
+            data = pd.DataFrame(list(zip(txt, [sentiment] * len(txt))))
             df = df.append(data)
             text.close()
     df.columns = ["text", "sentiment"]
@@ -58,14 +57,14 @@ def merge_training_data(result_filename, original_dir, sentiment):
 
 
 # Specify result directory
-result_dir = os.path.join(BASE_DIR, "corpora/processed/rottentomatoes/")
+result_dir = os.path.join(BASE_DIR, "sentiment_analysis/corpora/processed/rottentomatoes/")
 
 # Specify positive and negative training paths
 training_positive_path = os.path.join(
-    BASE_DIR, "corpora/raw/review_polarity/txt_sentoken/pos"
+    BASE_DIR, "sentiment_analysis/corpora/raw/review_polarity/txt_sentoken/pos"
 )
 training_negative_path = os.path.join(
-    BASE_DIR, "corpora/raw/review_polarity/txt_sentoken/neg"
+    BASE_DIR, "sentiment_analysis/corpora/raw/review_polarity/txt_sentoken/neg"
 )
 
 # Merge the training text files for positive and negative
@@ -78,10 +77,10 @@ merge_training_data(
 
 # Merge the development data and save it to a .csv file
 dev_positive_path = os.path.join(
-    BASE_DIR, "corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.pos"
+    BASE_DIR, "sentiment_analysis/corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.pos"
 )
 dev_negative_path = os.path.join(
-    BASE_DIR, "corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.neg"
+    BASE_DIR, "sentiment_analysis/corpora/raw/rt-polaritydata/rt-polaritydata/rt-polarity.neg"
 )
 merge_dev_data(
     f"{result_dir}development_data.csv", dev_positive_path, dev_negative_path

@@ -2,18 +2,18 @@ from time import time
 import argumentparser
 import pandas as pd
 import os
-from settings import BASE_DIR
 
-import resources.language_model as ngram
-import resources.naive_bayes_classifier as NBclassifier
+from ngram import LanguageModel, NaiveBayesClassifier
 import logging
 
-logging_filename = os.path.join(BASE_DIR, "logging", "process_times.log")
-logging.basicConfig(
-    filename=logging_filename,
-    level=logging.INFO,
-    format="%(asctime)s:%(levelname)s:%(message)s",
-)
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+
+# logging_filename = os.path.join(BASE_DIR, "logging", "process_times.log")
+# logging.basicConfig(
+#     filename=logging_filename,
+#     level=logging.INFO,
+#     format="%(asctime)s:%(levelname)s:%(message)s",
+# )
 
 corpora_dir = os.path.join(BASE_DIR, "corpora/processed/")
 
@@ -41,7 +41,7 @@ if method == "create":
     start = time()
     train_corpus_pos = f"{corpora_dir}{train_corpus}/positive_training.csv"
     train_corpus_neg = f"{corpora_dir}{train_corpus}/negative_training.csv"
-    LM_pos = ngram.LanguageModel(
+    LM_pos = LanguageModel(
         "positive",
         train_corpus_pos,
         N=N,
@@ -49,7 +49,7 @@ if method == "create":
         stemming=stemming,
         stopword_removal=stopword_removal,
     )
-    LM_neg = ngram.LanguageModel(
+    LM_neg = LanguageModel(
         "negative",
         train_corpus_neg,
         N=N,
@@ -60,16 +60,16 @@ if method == "create":
     end = time()
     LM_pos.save_models(positive_path)
     LM_neg.save_models(negative_path)
-    logging.info(
-        f"Model construction for {train_corpus} took {end-start} \
-                   seconds"
-    )
+    # logging.info(
+    #     f"Model construction for {train_corpus} took {end-start} \
+    #                seconds"
+    # )
 
 # Load the n-gram models with the given settings
 if method == "load":
     try:
-        LM_pos = ngram.LanguageModel("positive", model_file=positive_path)
-        LM_neg = ngram.LanguageModel("negative", model_file=negative_path)
+        LM_pos = LanguageModel("positive", model_file=positive_path)
+        LM_neg = LanguageModel("negative", model_file=negative_path)
     except BaseException:
         print(
             "Models with the given settings cannot be loaded, please choose \
@@ -78,7 +78,7 @@ if method == "load":
         exit()
 
 # Construct classifier from the two n-gram models
-classifier = NBclassifier.NaiveBayesClassifier(LM_pos, LM_neg)
+classifier = NaiveBayesClassifier(LM_pos, LM_neg)
 
 # Evaluate the classifier on the test set and report precision, recall and
 # counts, use a mixture model if specified
@@ -89,7 +89,7 @@ precision, recall, counts = classifier.evaluate(
 )
 end = time()
 
-logging.info(f"Evaluation for {dev_corpus} took {end-start} seconds")
+# logging.info(f"Evaluation for {dev_corpus} took {end-start} seconds")
 
 
 def save_results(result_filename, train_corpus, **kwargs):
