@@ -1,15 +1,9 @@
 autopep8
 black
-gensim
 isort
 matplotlib
-nltk>=3.4.5
 numpy
 pandas
-pip-tools
-pylint
 pytest
-regex
-requests
 scikit-learn
-scipy
+git+https://github.com/stevenbal/ngram.git@master
