@@ -16,4 +16,4 @@ word_embedding.py
 models_word2vec/
 env/
 sentiment_analysis/corpora/raw/
-pytestcache/
+.pytest_cache/
