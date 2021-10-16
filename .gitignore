@@ -17,3 +17,4 @@ models_word2vec/
 env/
 sentiment_analysis/corpora/raw/
 .pytest_cache/
+logging/
