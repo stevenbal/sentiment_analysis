@@ -17,12 +17,14 @@ LM_neg = LanguageModel("negative", model_file=model_file_neg)
 # Construct classifier from the two models
 classifier = NaiveBayesClassifier(LM_pos, LM_neg)
 
-# Determine the sentiment of the given sentence, only use bigram model
+def classify_sentence(sentence, prediction_thres=0.02):
+    return classifier.classify(sentence, prediction_thres=prediction_thres)
 
+# Determine the sentiment of the given sentence, only use bigram model
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         sentence = sys.argv[1]
     else:
         sentence = input("Please enter a sentence: ")
 
-    print(classifier.classify(sentence, prediction_thres=0.02))
+    print(classify_sentence(sentence))
