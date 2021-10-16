@@ -1,9 +1,0 @@
-autopep8
-black
-isort
-matplotlib
-numpy
-pandas
-pytest
-scikit-learn
-git+https://github.com/stevenbal/ngram.git@master

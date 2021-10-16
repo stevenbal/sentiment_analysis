@@ -1,8 +1,0 @@
-2019-01-15 13:30:20,413:INFO:Model construction for twitter took 454.9883406162262 seconds
-2019-01-15 13:31:30,520:INFO:Evaluation for rottentomatoes took 70.10656261444092 seconds
-2019-02-16 20:46:01,479:INFO:Model construction for rottentomatoes took 58.617591381073 seconds
-2019-02-16 20:46:27,709:INFO:Evaluation for rottentomatoes took 26.211397886276245 seconds
-2019-02-21 21:33:15,898:INFO:Evaluation for rottentomatoes took 28.65739369392395 seconds
-2019-05-24 22:16:14,778:INFO:Evaluation for rottentomatoes took 21.022207736968994 seconds
-2019-05-25 12:18:36,501:INFO:Model construction for rottentomatoes took 40.03985095024109                    seconds
-2019-05-25 12:18:55,798:INFO:Evaluation for rottentomatoes took 19.294017553329468 seconds
